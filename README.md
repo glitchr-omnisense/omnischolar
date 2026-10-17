@@ -1,8 +1,12 @@
-# glitchr/omnischolar
+# omniscient/omnischolar
 
 One contract for a researcher's publications: their profile, their works, their books and the
 editions of each, their citations - read from the services that know them, merged into one
 list, exported as BibTeX, RIS or CSL-JSON.
+
+Published as `omniscient/omnischolar` (formerly `glitchr/omnischolar`, which this package replaces: a
+`composer.json` that still requires the old name keeps resolving to this package, never both).
+`omniscient/` is the vendor of every family's core; the providers keep theirs (`omnischolar/crossref`...).
 
 ```php
 $works = $collector->collect([
@@ -56,7 +60,7 @@ the editions of a book are grouped under the newest one.
 ## Plain PHP
 
 ```sh
-composer require glitchr/omnischolar omnischolar/openalex omnischolar/hal
+composer require omniscient/omnischolar omnischolar/openalex omnischolar/hal
 ```
 
 ```php
@@ -113,7 +117,7 @@ docker compose run --rm omnischolar test
 
 ## Responsibility
 
-`glitchr/omnischolar` and its `omnischolar/*` providers are independent, unofficial clients: none is
+`omniscient/omnischolar` and its `omnischolar/*` providers are independent, unofficial clients: none is
 affiliated with, endorsed by or sponsored by the services it reaches. Each service keeps its own
 terms (licence of their data, attribution or citation, keys, rate limits), named with a link in the
 "Responsibility" section of the README of each provider that reaches one. The MIT licence covers
