@@ -48,7 +48,7 @@ abstract class SourceFactory implements SourceFactoryInterface
     {
         $mailto = $c->get('mailto');
 
-        return $c->get('user_agent') ?? ('omnischolar/1.x (+https://github.com/glitchr-studio/omnischolar'.($mailto ? '; mailto:'.$mailto : '').')');
+        return $c->get('user_agent') ?? ('omnischolar/1.x (+https://github.com/glitchr-omnisense/omnischolar'.($mailto ? '; mailto:'.$mailto : '').')');
     }
 
     /** The factory's name, its required options, the defaults of the others. */

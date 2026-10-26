@@ -2,7 +2,7 @@
 
 Omnischolar runs without a framework ([installation](installation.md)); in a Symfony application
 its bundle does the wiring. Its components - `symfony/config`, `symfony/dependency-injection`,
-`symfony/http-kernel` - are not required by `omniscient/omnischolar`: the application has them, and
+`symfony/http-kernel` - are not required by `omnisense/omnischolar`: the application has them, and
 nothing of them is loaded outside Symfony.
 
 Register `Omnischolar\Bridge\Symfony\OmnischolarBundle` (no Flex recipe):

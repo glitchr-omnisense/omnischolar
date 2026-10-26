@@ -1,12 +1,12 @@
-# omniscient/omnischolar
+# omnisense/omnischolar
 
 One contract for a researcher's publications: their profile, their works, their books and the
 editions of each, their citations - read from the services that know them, merged into one
 list, exported as BibTeX, RIS or CSL-JSON.
 
-Published as `omniscient/omnischolar` (formerly `glitchr/omnischolar`, which this package replaces: a
+Published as `omnisense/omnischolar` (formerly `glitchr/omnischolar`, which this package replaces: a
 `composer.json` that still requires the old name keeps resolving to this package, never both).
-`omniscient/` is the vendor of every family's core; the providers keep theirs (`omnischolar/crossref`...).
+`omnisense/` is the vendor of every family's core; the providers keep theirs (`omnischolar/crossref`...).
 
 ```php
 $works = $collector->collect([
@@ -30,13 +30,13 @@ Each source is a package of its own:
 
 | Package | Source | Key |
 |---|---|---|
-| [`omnischolar/openalex`](https://github.com/glitchr-studio/omnischolar-openalex) | OpenAlex: profiles and counts (h-index), works, citations, abstracts | none (`mailto`; a free key raises the daily budget) |
-| [`omnischolar/hal`](https://github.com/glitchr-studio/omnischolar-hal) | HAL: French open archive, full texts, filter by domain (`shs.droit`) | none |
-| [`omnischolar/crossref`](https://github.com/glitchr-studio/omnischolar-crossref) | Crossref: reference metadata by DOI, works by ORCID | none (`mailto`) |
-| [`omnischolar/orcid`](https://github.com/glitchr-studio/omnischolar-orcid) | ORCID: identity, CV (positions, degrees, distinctions), declared works | none (public API) |
-| [`omnischolar/openlibrary`](https://github.com/glitchr-studio/omnischolar-openlibrary) | Open Library: books, one record per edition, covers | none |
-| [`omnischolar/arxiv`](https://github.com/glitchr-studio/omnischolar-arxiv) | arXiv: preprints | none |
-| [`omnischolar/inspire`](https://github.com/glitchr-studio/omnischolar-inspire) | INSPIRE-HEP: physics literature, citation summary | none |
+| [`omnischolar/openalex`](https://github.com/glitchr-omnisense/omnischolar-openalex) | OpenAlex: profiles and counts (h-index), works, citations, abstracts | none (`mailto`; a free key raises the daily budget) |
+| [`omnischolar/hal`](https://github.com/glitchr-omnisense/omnischolar-hal) | HAL: French open archive, full texts, filter by domain (`shs.droit`) | none |
+| [`omnischolar/crossref`](https://github.com/glitchr-omnisense/omnischolar-crossref) | Crossref: reference metadata by DOI, works by ORCID | none (`mailto`) |
+| [`omnischolar/orcid`](https://github.com/glitchr-omnisense/omnischolar-orcid) | ORCID: identity, CV (positions, degrees, distinctions), declared works | none (public API) |
+| [`omnischolar/openlibrary`](https://github.com/glitchr-omnisense/omnischolar-openlibrary) | Open Library: books, one record per edition, covers | none |
+| [`omnischolar/arxiv`](https://github.com/glitchr-omnisense/omnischolar-arxiv) | arXiv: preprints | none |
+| [`omnischolar/inspire`](https://github.com/glitchr-omnisense/omnischolar-inspire) | INSPIRE-HEP: physics literature, citation summary | none |
 
 A source answers what it can - `capabilities()` says what - and throws `NotSupportedException`
 for the rest. Unknown is `null` or an empty page; a service down or rate limited is an
@@ -60,7 +60,7 @@ the editions of a book are grouped under the newest one.
 ## Plain PHP
 
 ```sh
-composer require omniscient/omnischolar omnischolar/openalex omnischolar/hal
+composer require omnisense/omnischolar omnischolar/openalex omnischolar/hal
 ```
 
 ```php
@@ -117,7 +117,7 @@ docker compose run --rm omnischolar test
 
 ## Responsibility
 
-`omniscient/omnischolar` and its `omnischolar/*` providers are independent, unofficial clients: none is
+`omnisense/omnischolar` and its `omnischolar/*` providers are independent, unofficial clients: none is
 affiliated with, endorsed by or sponsored by the services it reaches. Each service keeps its own
 terms (licence of their data, attribution or citation, keys, rate limits), named with a link in the
 "Responsibility" section of the README of each provider that reaches one. The MIT licence covers

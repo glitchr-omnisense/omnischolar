@@ -1,7 +1,7 @@
 # Installation and first calls
 
 ```sh
-composer require omniscient/omnischolar omnischolar/openalex omnischolar/hal omnischolar/openlibrary
+composer require omnisense/omnischolar omnischolar/openalex omnischolar/hal omnischolar/openlibrary
 ```
 
 PHP 8.2 or later. With `ext-intl`, the Merger compares titles across accents more thoroughly (a

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Every source package: its slug (omnischolar/<slug>, github.com/glitchr-studio/omnischolar-<slug>),
+ * Every source package: its slug (omnischolar/<slug>, github.com/glitchr-omnisense/omnischolar-<slug>),
  * its tests' namespace and its factory class.
  */
 return [

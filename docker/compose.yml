@@ -1,4 +1,4 @@
-# omniscient/omnischolar with every source package, against the real services:
+# omnisense/omnischolar with every source package, against the real services:
 #
 #   cp .env.dist .env                                          # a contact address; an OpenAlex key if you have one
 #   docker compose run --rm omnischolar sources                # which sources are installed and configured
@@ -20,7 +20,7 @@ name: omnischolar-harness
 services:
   omnischolar:
     build: .
-    image: omniscient/omnischolar-harness
+    image: omnisense/omnischolar-harness
     env_file:
       - path: .env
         required: false

@@ -1,5 +1,5 @@
 {
-    "name": "omniscient/omnischolar",
+    "name": "omnisense/omnischolar",
     "type": "library",
     "description": "Omnischolar: one contract for a researcher's publications - author profiles, works, books and their editions, citations - read from OpenAlex, HAL, Crossref, ORCID, Open Library, arXiv and INSPIRE, merged and deduplicated, exported as BibTeX, RIS or CSL-JSON; and its Symfony bundle.",
     "keywords": [
@@ -33,6 +33,7 @@
         "symfony/http-kernel": "^6.4|^7.0|^8.0"
     },
     "replace": {
+        "omniscient/omnischolar": "self.version",
         "glitchr/omnischolar": "self.version"
     },
     "suggest": {
