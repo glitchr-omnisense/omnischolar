@@ -1,3 +1,8 @@
+---
+title: Merging
+order: 32
+---
+
 # Merging
 
 ```php

@@ -1,3 +1,8 @@
+---
+title: Sources
+order: 30
+---
+
 # Sources
 
 Every source implements `Omnischolar\Source\SourceInterface`:
@@ -59,5 +64,15 @@ Every source implements `Omnischolar\Source\SourceInterface`:
 | inspire | 0.35 s | `mailto` in the User-Agent |
 | hal, orcid | none | User-Agent |
 
-Every factory takes `mailto`, `user_agent`, `throttle` (seconds between two calls of one source
-instance) and `base_uri`.
+Every factory takes `mailto`, `user_agent` and `base_uri`; `throttle` (seconds between two calls
+of one source instance) is read by arXiv, INSPIRE and Open Library ([Configuration](configuration.md)).
+
+> [!WARNING]
+> Known defect: the OpenAlex, Crossref, HAL and ORCID factories never pass `throttle` to their
+> source (`throttle: 2.5` gives a source that leaves no interval, seen on 2026-10-26), where every
+> factory is said to take it. Space their calls in the application, or with an HTTP client that
+> throttles.
+
+## Writing a source
+
+A source of another service: [Writing a provider](providers.md).

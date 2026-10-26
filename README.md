@@ -49,13 +49,19 @@ the editions of a book are grouped under the newest one.
 
 ## Documentation
 
+- [The manual's home: providers, when to use it](docs/index.md)
 - [Installation and first calls](docs/installation.md)
+- [Symfony](docs/symfony.md) and [Laravel](docs/laravel.md)
+- [Concepts, models and identifiers](docs/models.md)
 - [Sources: what each can and cannot do](docs/sources.md)
-- [Models and identifiers](docs/models.md)
 - [Merging: the rules and the preferences](docs/merging.md)
 - [Export: BibTeX, RIS, CSL-JSON](docs/export.md)
-- [Symfony](docs/symfony.md)
+- [Configuration reference](docs/configuration.md)
+- [Errors](docs/errors.md)
+- [Testing](docs/testing.md)
 - [The Docker harness](docs/harness.md)
+- [Writing a provider](docs/providers.md)
+- [Verified and not](docs/verified.md)
 
 ## Plain PHP
 

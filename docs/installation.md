@@ -1,16 +1,29 @@
-# Installation and first calls
+---
+title: Installation
+order: 10
+---
+
+# Installation
 
 ```sh
 composer require omnisense/omnischolar omnischolar/openalex omnischolar/hal omnischolar/openlibrary
 ```
 
-PHP 8.2 or later. With `ext-intl`, the Merger compares titles across accents more thoroughly (a
-fallback table covers the Latin accents without it).
+## Requirements
 
-Omnischolar needs no framework. The core requires nothing but `symfony/http-client-contracts`,
-each source package `symfony/http-client`: two libraries that stand alone. It runs the same in
-plain PHP, in a worker, in Laravel or Slim, and in Symfony, where a bundle does the wiring
-([Symfony](symfony.md)).
+- PHP 8.2 or later. With `ext-intl`, the Merger compares titles across accents more thoroughly (a
+  fallback table covers the Latin accents without it).
+- `omnisense/omnischolar` requires `symfony/http-client-contracts` (^3.0) and nothing else: no
+  framework, no HTTP client of its own. It replaces `omniscient/omnischolar`: a `composer.json`
+  that still requires the old name resolves to this package.
+- Each provider requires `omnisense/omnischolar` and `symfony/http-client` (6.4, 7 or 8); arXiv
+  needs `ext-dom` (its answers are Atom). A factory takes an `HttpClientInterface` (the
+  application's, a `MockHttpClient` in a test) and makes its own with `HttpClient::create()` when
+  given none.
+- The Symfony bundle needs `symfony/config`, `symfony/dependency-injection` and
+  `symfony/http-kernel`; none is required by the package ([Symfony](symfony.md)).
+
+It runs the same in plain PHP, in a worker, in Laravel or Slim, and in Symfony.
 
 ## Plain PHP
 
@@ -44,8 +57,8 @@ echo (new Export())->bibtex($works[0]);
 ```
 
 ```
-$ OMNISCHOLAR_MAILTO=you@example.org php bare.php
-Keitaro Nakatani: 288 works, h-index 51
+$ php bare.php
+Keitaro Nakatani: 387 works, h-index 53
 2024-10-04  Complete kinetic and photochemical characterization of the multi-step photochromic reaction of donor–acceptor Stenhouse adducts - Physical Chemistry Chemical Physics [openalex, hal]
 2024-09-25  Cascade Fluorescence Modulation in Photochromic Microcapsules - ACS Applied Materials & Interfaces [openalex, hal]
 2024-09-03  Tuning the Thermal Stability of Tetra ‐ o– chloroazobenzene Derivatives by Transforming Push‐Pull to Push‐Push Systems - Chemistry - A European Journal [openalex, hal]
@@ -55,11 +68,21 @@ Keitaro Nakatani: 288 works, h-index 51
   title = {{Complete kinetic and photochemical characterization of the multi-step photochromic reaction of donor–acceptor Stenhouse adducts}},
   journal = {Physical Chemistry Chemical Physics},
   year = {2024},
-  ...
+  month = {oct},
+  volume = {27},
+  number = {3},
+  pages = {1320--1326},
+  doi = {10.1039/d4cp02267j},
+  issn = {1463-9076},
+  hal_id = {hal-04737711},
+  url = {https://doi.org/10.1039/d4cp02267j},
+  language = {en},
+  keywords = {DASA, photochromism, photoisomerization, reaction kinetics, quantum yield, double irradiation, temperature dependence}
 }
 ```
 
-(as answered on 2026-10-05: each work once, from OpenAlex and HAL merged)
+(called live on 2026-10-26 from the harness's image, without a `mailto`: each work once, from
+OpenAlex and HAL merged; on 2026-10-05 the same script counted 288 works and an h-index of 51)
 
 No key, no account: the script asks the real services. That is all there is to it:
 
@@ -84,7 +107,7 @@ use Symfony\Component\HttpClient\HttpClient;
 $openalex = (new OpenAlexSourceFactory(HttpClient::create()))->create(['mailto' => 'support@glitchr.io']);
 
 $author = $openalex->author('A5108007452');
-$author->metrics->hIndex;                    // 51
+$author->metrics->hIndex;                    // 53 on 2026-10-26
 $author->orcid();                            // 0009-0005-1387-7295
 
 $page = $openalex->works('A5108007452', new Query(from: 2024, to: 2024));
@@ -133,12 +156,6 @@ source's pages into one list, `Collector::all($source, $author, $query, $max)`.
 
 ## Errors
 
-| Exception | When |
-|---|---|
-| `NotSupportedException` | the source does not do that, or cannot read that identifier |
-| `RateLimitedException` | 429: slow down (`$retryAfter` seconds, when the service says) |
-| `UnavailableException` | 5xx, a timeout, a network error: never "nothing" |
-| `ProviderException` | any other error answer (a malformed query: 400) |
-| `InvalidConfigException` | a source not configured, a factory not installed, an option missing |
-
-All implement `Omnischolar\Exception\OmnischolarException`. Not found is `null` or an empty page.
+Not found is `null` or an empty page; everything else is an exception implementing
+`Omnischolar\Exception\OmnischolarException`. A service that is down or asks to slow down is an
+`UnavailableException` (or `RateLimitedException`), never "nothing": see [Errors](errors.md).
