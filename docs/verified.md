@@ -40,6 +40,9 @@ next (OpenAlex counted 288 works for A5108007452 on 2026-10-05, 387 on 2026-10-2
 - The known defect found while writing this manual: `throttle` not read by the OpenAlex, Crossref,
   HAL and ORCID factories ([Configuration](configuration.md#options-every-source-takes)), fixed
   since with a test in each.
+- The known defect of OpenAlex's `paratext` (and Open Library's `editions`), read with PHP's
+  `(bool)` so that the string `'false'` was true: fixed since, both read with `Config::bool()`,
+  with a test in each.
 
 ## Responsibility
 

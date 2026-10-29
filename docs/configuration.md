@@ -34,7 +34,9 @@ several names with different options (`hal`, and `droit` filtered on `shs.droit`
 
 `Omnischolar\Config` (an `ArrayObject`) holds the options given, with the factory's defaults under
 them: `defaults()` sets each key not given **or given as `null`**. `get($key, $default)` gives the
-default for a key missing or `null`. Before `build()`, `validateNotEmpty()` refuses each key of
+default for a key missing or `null`; `bool($key, $default)` reads a boolean whatever its spelling
+(`true`, `1`, `"true"`, `"yes"`, `"on"`; `false`, `0`, `"false"`, `"no"`, `"off"`, `""`; anything
+else an `InvalidConfigException`), as a site's YAML or environment gives a string. Before `build()`, `validateNotEmpty()` refuses each key of
 `omnischolar.required_options` that is missing, `''` or `[]` (`The "x" source needs: key.`); no
 provider requires any option today. The keys every factory sets for itself:
 `omnischolar.factory_name` and `omnischolar.required_options`.
@@ -102,8 +104,9 @@ $http = null)`; with none, `HttpClient::create()`.
 | `throttle` | float | `0.35` | INSPIRE allows 15 calls in 5 seconds |
 | `base_uri` | string | `https://inspirehep.net/api/` | |
 
-`paratext` and `editions` are read with PHP's `(bool)`: give a real boolean (the string `'false'`
-is true).
+`paratext` and `editions` are read with `Config::bool()`: `'false'`, `'0'`, `'no'` or `'off'` (an
+environment variable's string) is false, a value that is no boolean an `InvalidConfigException`
+(`The "openalex" source's paratext is a boolean (true or false), not "maybe".`).
 
 ## The Merger, the Collector, the Export
 

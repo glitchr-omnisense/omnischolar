@@ -37,4 +37,18 @@ final class Config extends \ArrayObject
     {
         return $this->offsetExists($key) && null !== $this[$key] ? $this[$key] : $default;
     }
+
+    /**
+     * An option read as a boolean whatever its spelling: a site's YAML or
+     * environment gives a string, and PHP's (bool) reads "false" as true.
+     * true, 1, "1", "true", "yes", "on" are true; false, 0, "0", "false",
+     * "no", "off" and "" are false; anything else is an InvalidConfigException.
+     */
+    public function bool(string $key, bool $default = false): bool
+    {
+        $value = $this->get($key, $default);
+        $bool = \is_bool($value) ? $value : (\is_scalar($value) ? filter_var($value, \FILTER_VALIDATE_BOOLEAN, \FILTER_NULL_ON_FAILURE) : null);
+
+        return $bool ?? throw new InvalidConfigException(\sprintf('The "%s" source\'s %s is a boolean (true or false), not %s.', $this['omnischolar.factory_name'] ?? '?', $key, json_encode($value)));
+    }
 }
