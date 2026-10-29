@@ -38,7 +38,8 @@ next (OpenAlex counted 288 works for A5108007452 on 2026-10-05, 387 on 2026-10-2
   second, as its documentation said in 2026).
 - The Laravel service provider of [Laravel](laravel.md): written from the classes.
 - The known defect found while writing this manual: `throttle` not read by the OpenAlex, Crossref,
-  HAL and ORCID factories ([Configuration](configuration.md#options-every-source-takes)).
+  HAL and ORCID factories ([Configuration](configuration.md#options-every-source-takes)), fixed
+  since with a test in each.
 
 ## Responsibility
 

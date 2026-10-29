@@ -46,11 +46,7 @@ provider requires any option today. The keys every factory sets for itself:
 | `mailto` | string | `null` | a contact address: added to the `User-Agent` (`omnischolar/1.x (+https://github.com/glitchr-omnisense/omnischolar; mailto:<address>)`), and sent as a parameter by OpenAlex and Crossref (their polite pools) |
 | `user_agent` | string | `omnischolar/1.x (+https://github.com/glitchr-omnisense/omnischolar)` and the `mailto` | the `User-Agent` of every call; when set, the `mailto` is not added to it |
 | `base_uri` | string | each provider's | the service's address, to point at a copy, a proxy or a sandbox |
-| `throttle` | float | each provider's (below) | seconds left between two calls of one source - read by arXiv, INSPIRE and Open Library only |
-
-> [!WARNING]
-> Known defect: the OpenAlex, Crossref, HAL and ORCID factories never pass `throttle` to their
-> source, where the base factory's docblock says every source takes it.
+| `throttle` | float | each provider's (below) | seconds left between two calls of one source; `0.0` for OpenAlex, Crossref, HAL and ORCID |
 
 A factory's constructor takes the HTTP client: `new OpenAlexSourceFactory(?HttpClientInterface
 $http = null)`; with none, `HttpClient::create()`.
