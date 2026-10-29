@@ -77,3 +77,10 @@ test `capabilities()` rather than catch them.
   csl-json.`).
 - `ValueError`: `Identifier::of()` with a scheme name that is not a `Scheme`.
 - `JsonException`: `Export::cslJson()` on a value JSON cannot encode (an invalid UTF-8 string).
+
+## No secret in a failure
+
+A source keeps its key out of what `HttpSource` throws: in the query (OpenAlex's `api_key`) or a
+header (a bearer), it is masked in the HTTP client's message (`Http\Redaction::text()`), the previous
+exception is a copy of the client's (`Redaction::copy()`: the same class and code), and no trace of
+the chain keeps its arguments, where the query and headers stood (`zend.exception_ignore_args` off).

@@ -6,6 +6,7 @@ use Omnischolar\Exception\NotSupportedException;
 use Omnischolar\Exception\ProviderException;
 use Omnischolar\Exception\RateLimitedException;
 use Omnischolar\Exception\UnavailableException;
+use Omnischolar\Http\Redaction;
 use Omnischolar\Model\Identifier;
 use Omnischolar\Model\Scheme;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
@@ -70,10 +71,10 @@ abstract class HttpSource implements SourceInterface
         try {
             $data = json_decode($body, true, 512, \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw new ProviderException($this->getName(), 'the answer is not JSON: '.$e->getMessage(), null, $e);
+            throw Redaction::withoutArguments(new ProviderException($this->getName(), 'the answer is not JSON: '.$e->getMessage(), null, $e));
         }
 
-        return \is_array($data) ? $data : throw new ProviderException($this->getName(), 'the answer is not a JSON object');
+        return \is_array($data) ? $data : throw Redaction::withoutArguments(new ProviderException($this->getName(), 'the answer is not a JSON object'));
     }
 
     /**
@@ -106,20 +107,26 @@ abstract class HttpSource implements SourceInterface
             }
             if (429 === $status) {
                 $retry = $response->getHeaders(false)['retry-after'][0] ?? null;
-                throw new RateLimitedException($this->getName(), null !== $retry && is_numeric($retry) ? (int) $retry : null);
+                throw Redaction::withoutArguments(new RateLimitedException($this->getName(), null !== $retry && is_numeric($retry) ? (int) $retry : null));
             }
             if ($status >= 500) {
-                throw new UnavailableException($this->getName(), \sprintf('the service answered %d', $status), $status);
+                throw Redaction::withoutArguments(new UnavailableException($this->getName(), \sprintf('the service answered %d', $status), $status));
             }
             if ($status >= 400) {
-                throw new ProviderException($this->getName(), \sprintf('the service answered %d: %s', $status, (string) preg_replace('~^(.{0,300}).*$~us', '$1', trim(strip_tags($response->getContent(false))))), $status);
+                throw Redaction::withoutArguments(new ProviderException($this->getName(), \sprintf('the service answered %d: %s', $status, (string) preg_replace('~^(.{0,300}).*$~us', '$1', trim(strip_tags($response->getContent(false))))), $status));
             }
 
             return $response->getContent();
         } catch (TransportExceptionInterface $e) {
-            throw new UnavailableException($this->getName(), 'unreachable: '.$e->getMessage(), null, $e);
+            // The key (the query, a header) masked in the message and the previous, a copy; no trace keeps the arguments.
+            $secrets = Redaction::secrets($url, ['headers' => $headers + $this->headers]);
+
+            throw Redaction::withoutArguments(new UnavailableException($this->getName(), 'unreachable: '.Redaction::text($e->getMessage(), $secrets), null, Redaction::copy($e, $secrets)));
         } catch (ExceptionInterface $e) {
-            throw new ProviderException($this->getName(), $e->getMessage(), null, $e);
+            // The key (the query, a header) masked in the message and the previous, a copy; no trace keeps the arguments.
+            $secrets = Redaction::secrets($url, ['headers' => $headers + $this->headers]);
+
+            throw Redaction::withoutArguments(new ProviderException($this->getName(), Redaction::text($e->getMessage(), $secrets), null, Redaction::copy($e, $secrets)));
         }
     }
 
