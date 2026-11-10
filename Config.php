@@ -7,13 +7,20 @@ use Omnischolar\Exception\InvalidConfigException;
 /**
  * A source's configuration while its factory builds it: the options
  * given, the factory's defaults under them, and the keys that must be filled.
- *
- * @extends \ArrayObject<string, mixed>
+ * omnisense/contracts' Config with the family's prefix ("omnischolar.factory_name",
+ * "omnischolar.required_options", "omnischolar.name", "omnischolar.limiter"), its
+ * messages and its InvalidConfigException; a null counts as not set.
  */
-final class Config extends \ArrayObject
+final class Config extends \Omnisense\Contracts\Provider\Config
 {
-    /** Sets each key not set yet (a null counts as not set). */
-    public function defaults(array $defaults): self
+    public const PREFIX = 'omnischolar';
+
+    /**
+     * Sets each key not set yet (a null counts as not set).
+     *
+     * @param array<string, mixed> $defaults
+     */
+    public function defaults(array $defaults): static
     {
         foreach ($defaults as $key => $value) {
             if (!$this->offsetExists($key) || null === $this[$key]) {
@@ -50,5 +57,10 @@ final class Config extends \ArrayObject
         $bool = \is_bool($value) ? $value : (\is_scalar($value) ? filter_var($value, \FILTER_VALIDATE_BOOLEAN, \FILTER_NULL_ON_FAILURE) : null);
 
         return $bool ?? throw new InvalidConfigException(\sprintf('The "%s" source\'s %s is a boolean (true or false), not %s.', $this['omnischolar.factory_name'] ?? '?', $key, json_encode($value)));
+    }
+
+    protected function invalid(string $message): \Throwable
+    {
+        return new InvalidConfigException(str_replace(' provider', ' source', $message));
     }
 }

@@ -80,3 +80,13 @@ Classes of a framework (DependencyInjection, Config, HttpKernel, HttpFoundation,
 
 The image is `php:8.4-cli-alpine` with `intl` and Composer; the harness's packages live in the
 `harness` volume of the `omnischolar-harness` project.
+
+## omnisense/contracts and PHPStan
+
+The kernel the family builds on, omnisense/contracts, comes from GitHub (branch 1.x) unless
+`OMNISENSE_CONTRACTS` in `docker/.env` names its checkout (`../../../omnisense-contracts` beside
+the family's folder): then that checkout runs, and its tests with the family's.
+`docker compose run --rm omnischolar phpstan` runs PHPStan at level max on each package that has a
+`phpstan.neon`; each `phpstan-baseline.neon` holds what was there when PHPStan came in
+(2026-11-10), and may only shrink. The service runs on Docker's default bridge (no network of its
+own); its image may be another harness tagged (PHP 8.4 with zip, intl and Composer).

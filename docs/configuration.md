@@ -39,7 +39,7 @@ default for a key missing or `null`; `bool($key, $default)` reads a boolean what
 else an `InvalidConfigException`), as a site's YAML or environment gives a string. Before `build()`, `validateNotEmpty()` refuses each key of
 `omnischolar.required_options` that is missing, `''` or `[]` (`The "x" source needs: key.`); no
 provider requires any option today. The keys every factory sets for itself:
-`omnischolar.factory_name` and `omnischolar.required_options`.
+`omnischolar.factory_name` and `omnischolar.required_options`; the registry gives `omnischolar.name` (the name configured) and `omnischolar.limiter` (where requests are counted).
 
 ## Options every source takes
 
@@ -49,6 +49,9 @@ provider requires any option today. The keys every factory sets for itself:
 | `user_agent` | string | `omnischolar/1.x (+https://github.com/glitchr-omnisense/omnischolar)` and the `mailto` | the `User-Agent` of every call; when set, the `mailto` is not added to it |
 | `base_uri` | string | each provider's | the service's address, to point at a copy, a proxy or a sandbox |
 | `throttle` | float | each provider's (below) | seconds left between two calls of one source; `0.0` for OpenAlex, Crossref, HAL and ORCID |
+| `max_wait` | float | `10.0` | seconds a request may wait for a limit of the source's usage policy (or a wait the service asked for); a longer wait refuses it, `RateLimitedException` with `wasSent()` false ([Usage policies](policies.md)) |
+| `policy` | map | none | the site's tightening of the source's usage policy, in omnisense/contracts' schema (`rateLimits`, `concurrency`, `rights`, `requirements`); never looser |
+| `usage` | map | none | what the site is: `commercial`, `open_source`, `contract`; a use the source's terms forbid fails at the first request |
 
 A factory's constructor takes the HTTP client: `new OpenAlexSourceFactory(?HttpClientInterface
 $http = null)`; with none, `HttpClient::create()`.

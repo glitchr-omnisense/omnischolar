@@ -11,22 +11,34 @@
 #   docker compose run --rm omnischolar merge openalex:A5108007452 hal:"Keitaro Nakatani" --from 2024 --format bibtex
 #   docker compose run --rm omnischolar bare                   # plain PHP: no bundle, no container, and what PHP loaded
 #   docker compose run --rm omnischolar test                   # every package's tests
+#   docker compose run --rm omnischolar phpstan                # PHPStan, each package at the highest level
 #
 # Sources come from GitHub (branch 1.x) unless their checkout sits under
 # OMNISCHOLAR_PLUGINS (set it to ../.. in .env when this core sits in the
-# workspace beside them): then that checkout is what runs.
+# workspace beside them): then that checkout is what runs. omnisense/contracts likewise: its
+# checkout under OMNISENSE_CONTRACTS (../../../omnisense-contracts when it sits beside the
+# family's folder), its tests run with the family's; GitHub (branch 1.x) otherwise.
 name: omnischolar-harness
 
 services:
   omnischolar:
     build: .
     image: omnisense/omnischolar-harness
+    # The image may be another harness tagged (PHP 8.4 with zip, intl and Composer): the
+    # entrypoint and Composer's settings are named here, not taken from the image.
+    entrypoint: ["/omnischolar/core/docker/entrypoint.sh"]
+    # One service, no server beside it: Docker's default bridge, no network of its own to create.
+    network_mode: bridge
+    environment:
+      COMPOSER_ALLOW_SUPERUSER: "1"
+      COMPOSER_CACHE_DIR: /harness/.cache
     env_file:
       - path: .env
         required: false
     volumes:
       - ..:/omnischolar/core
       - ${OMNISCHOLAR_PLUGINS:-./plugins}:/omnischolar/plugins:ro
+      - ${OMNISENSE_CONTRACTS:-./contracts}:/omnisense/contracts:ro
       - harness:/harness
 
 volumes:

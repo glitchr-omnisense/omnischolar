@@ -58,6 +58,7 @@ the editions of a book are grouped under the newest one.
 - [Export: BibTeX, RIS, CSL-JSON](docs/export.md)
 - [Configuration reference](docs/configuration.md)
 - [Errors](docs/errors.md)
+- [Usage policies: each source\'s limits, licence and credit](docs/policies.md)
 - [Testing](docs/testing.md)
 - [The Docker harness](docs/harness.md)
 - [Writing a provider](docs/providers.md)
@@ -127,7 +128,9 @@ docker compose run --rm omnischolar test
 affiliated with, endorsed by or sponsored by the services it reaches. Each service keeps its own
 terms (licence of their data, attribution or citation, keys, rate limits), named with a link in the
 "Responsibility" section of the README of each provider that reaches one. The MIT licence covers
-this code only and grants no right to any service or to its data.
+this code only and grants no right to any service or to its data. What was read of
+each service's terms is declared in its provider's `policy.json` ([Usage policies](docs/policies.md)),
+and every request honours it.
 
 Whoever installs and runs these packages is responsible for complying with those terms, for
 obtaining whatever they require, and for any use made of what they return. The authors publish them
