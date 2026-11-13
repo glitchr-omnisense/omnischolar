@@ -11,3 +11,15 @@ parameters:
     excludePaths:
         - vendor (?)
         - docker (?)
+    ignoreErrors:
+        # The source packages are optional: the bundle lists those it knows and registers the ones
+        # installed (class_exists). The package's CI analyses it alone, the harness with all of them,
+        # where PHPStan then finds the is_subclass_of() check always true.
+        -
+            identifier: class.notFound
+            path: Bridge/Symfony/OmnischolarBundle.php
+            reportUnmatched: false
+        -
+            identifier: function.alreadyNarrowedType
+            path: Bridge/Symfony/OmnischolarBundle.php
+            reportUnmatched: false

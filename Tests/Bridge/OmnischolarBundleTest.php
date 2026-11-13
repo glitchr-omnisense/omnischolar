@@ -2,6 +2,7 @@
 
 namespace Omnischolar\Tests\Bridge;
 
+use Composer\InstalledVersions;
 use Omnischolar\Bridge\Symfony\OmnischolarBundle;
 use Omnischolar\Collector;
 use Omnischolar\Export;
@@ -48,8 +49,11 @@ final class OmnischolarBundleTest extends TestCase
 
         $registry = $container->get(Registry::class);
         self::assertSame(['hal', 'openalex'], $registry->names());
+        // The source packages are optional: those installed beside this one (all of them in the harness).
         foreach (['openalex', 'hal', 'crossref', 'orcid', 'openlibrary', 'arxiv', 'inspire'] as $factory) {
-            self::assertContains($factory, $registry->factories(), 'the packages installed are registered');
+            if (InstalledVersions::isInstalled('omnischolar/'.$factory)) {
+                self::assertContains($factory, $registry->factories(), 'the packages installed are registered');
+            }
         }
         self::assertContains('stub', $registry->factories(), 'the application\'s own, autoconfigured');
 

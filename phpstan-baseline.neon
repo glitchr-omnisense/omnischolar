@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to function is_subclass_of\(\) with ''Omnischolar\\\\Arxiv\\\\ArxivSourceFactory''\|''Omnischolar\\\\Crossref\\\\CrossrefSourceFactory''\|''Omnischolar\\\\Hal\\\\HalSourceFactory''\|''Omnischolar\\\\Inspire\\\\InspireSourceFactory''\|''Omnischolar\\\\OpenAlex\\\\OpenAlexSourceFactory''\|''Omnischolar\\\\OpenLibrary\\\\OpenLibrarySourceFactory''\|''Omnischolar\\\\Orcid\\\\OrcidSourceFactory'' and ''Omnischolar\\\\Source\\\\SourceFactoryInterface'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: Bridge/Symfony/OmnischolarBundle.php
-
-		-
 			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
 			identifier: argument.type
 			count: 2

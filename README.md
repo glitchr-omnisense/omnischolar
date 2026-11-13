@@ -71,6 +71,8 @@ composer require omnisense/omnischolar omnischolar/openalex omnischolar/hal
 ```
 
 ```php
+require __DIR__.'/vendor/autoload.php';
+
 use Omnischolar\Collector;
 use Omnischolar\Hal\HalSourceFactory;
 use Omnischolar\OpenAlex\OpenAlexSourceFactory;
@@ -82,11 +84,15 @@ $registry = new Registry([new OpenAlexSourceFactory($http), new HalSourceFactory
     'openalex' => ['factory' => 'openalex', 'options' => ['mailto' => 'you@example.org']],
     'hal' => ['factory' => 'hal'],
 ]);
-$openalex = $registry->get('openalex');
+echo $registry->get('openalex')->work('10.1039/d4sc04973j')->title, "\n";   // one work, by its DOI
+
 $works = (new Collector($registry))->collect(['openalex' => 'A5108007452', 'hal' => 'Keitaro Nakatani']);
+echo count($works), " works, merged from both\n";
 ```
 
-No bundle, no container: a factory per source package, the registry built by hand.
+No account and no key: every source of the family is open (a `mailto` of yours, as OpenAlex,
+Crossref and Open Library ask). No bundle, no container: a factory per source package, the
+registry built by hand.
 [docs/installation.md](docs/installation.md) opens on a whole script that runs as it is, against
 the real services.
 

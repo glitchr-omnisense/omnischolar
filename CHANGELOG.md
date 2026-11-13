@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-13
+
 ### Added
 
 - On omnisense/contracts, the kernel of the omni families, with usage policies. Every HTTP request
@@ -31,6 +33,8 @@
 
 ### Changed
 
+- Requires `omnisense/contracts: ^1.0`: stable versions, so `composer require omnisense/omnischolar` installs in a project at the default minimum-stability. `extra.branch-alias` names 1.x (`1.x-dev`); the CI (`.github/workflows/ci.yml`, glitchr-studio/ci's shared workflow) and the release on a tag (`release.yml`).
+- The package passes its CI alone, without the source packages: the bundle test asserts the sources registered for those installed (`Composer\InstalledVersions`), and PHPStan leaves the bundle's list of the source packages it knows, optional, to `class_exists()` (its baseline loses the `is_subclass_of()` entry, true only with every source installed). The README's plain-PHP block is a whole first call.
 - **A limit reached waits or refuses.** A request over a limit of the source's policy waits when
   the limit's window ends within `max_wait` seconds (10 by default) - the sleep the sources'
   default `throttle` did, now read from the policy, and kept for the callers that relied on it
