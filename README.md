@@ -86,8 +86,12 @@ $registry = new Registry([new OpenAlexSourceFactory($http), new HalSourceFactory
 ]);
 echo $registry->get('openalex')->work('10.1039/d4sc04973j')->title, "\n";   // one work, by its DOI
 
-$works = (new Collector($registry))->collect(['openalex' => 'A5108007452', 'hal' => 'Keitaro Nakatani']);
-echo count($works), " works, merged from both\n";
+$collector = new Collector($registry);
+$works = $collector->collect(['openalex' => 'A5108007452', 'hal' => 'Keitaro Nakatani']);
+echo count($works), " works, merged\n";
+foreach ($collector->incomplete as $source => $why) {
+    echo "skipped $source: $why\n";                 // down, rate limited, an answer cut short: ask again later
+}
 ```
 
 No account and no key: every source of the family is open (a `mailto` of yours, as OpenAlex,

@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-13
+
+### Fixed
+- A 2xx answer that does not parse as JSON is an `UnavailableException` (a `ProviderException`
+  still), no longer a plain `ProviderException`: `Collector::collect()` skips that source, names
+  it in `$incomplete` and returns what the others answered, instead of failing the whole collect.
+  On 2026-11-13 the README's first call failed once on an OpenAlex page of works (`Control
+  character error, possibly incorrectly encoded`, what a page cut inside a string gives: three cuts
+  in four of a recorded page do); the same pages came whole a run later.
+- Its message says what was received: the status, the content type, the length, `cut short?` when
+  a JSON body stops before its end, the first and last bytes (control characters and bytes that
+  are not UTF-8 written `\xNN`, the request's secrets masked). JSON that is not an object stays a
+  `ProviderException`, with the same account of the body.
+
+### Changed
+- README: the first call prints the sources the collect skipped.
+
 ## [1.0.0] - 2026-11-13
 
 ### Added

@@ -126,22 +126,29 @@ abstract class HttpSource implements SourceInterface, DeclaresUsagePolicyInterfa
     /**
      * GETs JSON. Null when the service answers 404 / 410.
      *
+     * A 2xx body that does not parse (cut short, an HTML page, bytes that are
+     * not UTF-8) is an UnavailableException: the service gave no answer to
+     * read, ask again later - a Collector skips that source and goes on. Its
+     * message says what was received: the status, the content type, the
+     * length, the body's first and last bytes.
+     *
      * @param array<string, mixed>  $query
      * @param array<string, string> $headers
      */
     protected function getJson(string $path, array $query = [], array $headers = []): ?array
     {
-        $body = $this->get($path, $query, ['Accept' => 'application/json'] + $headers);
-        if (null === $body) {
+        $answer = $this->fetch($path, $query, ['Accept' => 'application/json'] + $headers);
+        if (null === $answer) {
             return null;
         }
+        [$body, $status, $type, $secrets] = $answer;
         try {
             $data = json_decode($body, true, 512, \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw Redaction::withoutArguments(new ProviderException($this->getName(), 'the answer is not JSON: '.$e->getMessage(), null, $e));
+            throw Redaction::withoutArguments(new UnavailableException($this->getName(), \sprintf('the answer is not JSON (%s): %s', $e->getMessage(), self::received($body, $status, $type, $secrets)), $status, $e));
         }
 
-        return \is_array($data) ? $data : throw Redaction::withoutArguments(new ProviderException($this->getName(), 'the answer is not a JSON object'));
+        return \is_array($data) ? $data : throw Redaction::withoutArguments(new ProviderException($this->getName(), 'the answer is not a JSON object: '.self::received($body, $status, $type, $secrets), $status));
     }
 
     /**
@@ -151,6 +158,21 @@ abstract class HttpSource implements SourceInterface, DeclaresUsagePolicyInterfa
      * @param array<string, string> $headers
      */
     protected function get(string $path, array $query = [], array $headers = []): ?string
+    {
+        return $this->fetch($path, $query, $headers)[0] ?? null;
+    }
+
+    /**
+     * The GET behind get() and getJson(): the body, the status, the content
+     * type and the secrets of the request (to mask in what is said of the
+     * body); null on 404 / 410.
+     *
+     * @param array<string, mixed>  $query
+     * @param array<string, string> $headers
+     *
+     * @return array{0: string, 1: int, 2: ?string, 3: list<string>}|null
+     */
+    private function fetch(string $path, array $query, array $headers): ?array
     {
         $this->wait();
         $url = str_starts_with($path, 'http') ? $path : rtrim($this->baseUri, '/').'/'.ltrim($path, '/');
@@ -191,7 +213,7 @@ abstract class HttpSource implements SourceInterface, DeclaresUsagePolicyInterfa
                 throw Redaction::withoutArguments(new ProviderException($this->getName(), \sprintf('the service answered %d: %s', $status, (string) preg_replace('~^(.{0,300}).*$~us', '$1', trim(strip_tags($response->getContent(false))))), $status));
             }
 
-            return $response->getContent();
+            return [$response->getContent(), $status, $response->getHeaders(false)['content-type'][0] ?? null, Redaction::secrets($url, ['headers' => $headers + $this->headers])];
         } catch (TransportExceptionInterface $e) {
             // The key (the query, a header) masked in the message and the previous, a copy; no trace keeps the arguments.
             $secrets = Redaction::secrets($url, ['headers' => $headers + $this->headers]);
@@ -205,6 +227,57 @@ abstract class HttpSource implements SourceInterface, DeclaresUsagePolicyInterfa
         } finally {
             $guard->record($operation);
         }
+    }
+
+    /**
+     * What was received, for a message: "HTTP 200, application/json, 1032096
+     * bytes, cut short? begins "{"meta":...", ends "...,"title":"Synth"" -
+     * control characters and bytes that are not UTF-8 written \xNN, the
+     * request's secrets masked.
+     *
+     * @param list<string> $secrets
+     */
+    private static function received(string $body, int $status, ?string $type, array $secrets): string
+    {
+        $show = static fn (string $bytes): string => Redaction::text((string) preg_replace_callback(
+            1 === preg_match('//u', $bytes) ? '~[\x00-\x1f\x7f]~' : '~[\x00-\x1f\x7f-\xff]~',
+            static fn (array $m): string => \sprintf('\\x%02X', \ord($m[0])),
+            $bytes,
+        ), $secrets);
+        $trimmed = rtrim($body);
+        $said = \sprintf('HTTP %d, %s, %d bytes', $status, $type ?? 'no content type', \strlen($body));
+        if ('' === $trimmed) {
+            return $said.', empty';
+        }
+        if (\in_array($trimmed[0], ['{', '['], true) && !\in_array($trimmed[-1], ['}', ']'], true)) {
+            $said .= ', cut short?';
+        }
+        if (\strlen($body) <= 160) {
+            return $said.', "'.$show($body).'"';
+        }
+
+        return $said.', begins "'.$show(self::head($body, 100)).'", ends "'.$show(self::tail($body, 60)).'"';
+    }
+
+    /** The first $length bytes or so, not ending inside a UTF-8 character. */
+    private static function head(string $body, int $length): string
+    {
+        while ($length > 0 && $length < \strlen($body) && 0x80 === (\ord($body[$length]) & 0xC0)) {
+            --$length;
+        }
+
+        return substr($body, 0, $length);
+    }
+
+    /** The last $length bytes or so, not starting inside a UTF-8 character. */
+    private static function tail(string $body, int $length): string
+    {
+        $start = \strlen($body) - $length;
+        while ($start > 0 && 0x80 === (\ord($body[$start]) & 0xC0)) {
+            ++$start;
+        }
+
+        return substr($body, max(0, $start));
     }
 
     /** Leaves the configured interval since the last call. */
