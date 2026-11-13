@@ -18,6 +18,7 @@
 
 ### Changed
 - README: the first call prints the sources the collect skipped.
+- Neutral example data in docs and tests.
 
 ## [1.0.0] - 2026-11-13
 

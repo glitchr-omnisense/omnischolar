@@ -77,7 +77,7 @@ final class Console
         $app->addCommand($self->command('work', 'One work by an identifier (JSON)', [$source, new InputArgument('id', InputArgument::REQUIRED, 'A DOI, ISBN, arXiv, HAL, OpenAlex, INSPIRE, Open Library id...')], fn ($in, $out) => $self->work($in, $out)));
         $app->addCommand($self->command('search', 'Works matching a text in one source', [$source, new InputArgument('text', InputArgument::OPTIONAL, 'Free text (INSPIRE: its own query language)'), new InputOption('title', null, InputOption::VALUE_REQUIRED), new InputOption('author', 'a', InputOption::VALUE_REQUIRED), ...$filters, ...$output], fn ($in, $out) => $self->search($in, $out)));
         $app->addCommand($self->command('merge', 'An author\'s works from several sources, merged: editions grouped, each field from its preferred source', [
-            new InputArgument('profiles', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'source:author pairs: openalex:A5108007452 hal:"Keitaro Nakatani" openlibrary:"Monica Neagoy"'),
+            new InputArgument('profiles', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'source:author pairs: openalex:A5046427077 hal:"Alain Aspect" openlibrary:"Alain Aspect"'),
             ...$filters, ...$output,
             new InputOption('no-editions', null, InputOption::VALUE_NONE, 'Leave the editions of a book apart'),
         ], fn ($in, $out) => $self->merge($in, $out)));
@@ -174,7 +174,7 @@ final class Console
         foreach ((array) $in->getArgument('profiles') as $pair) {
             [$source, $author] = explode(':', (string) $pair, 2) + [1 => ''];
             if ('' === $author) {
-                throw new \InvalidArgumentException(\sprintf('"%s": a profile is source:author (openalex:A5108007452).', $pair));
+                throw new \InvalidArgumentException(\sprintf('"%s": a profile is source:author (openalex:A5046427077).', $pair));
             }
             $profiles[$source][] = $this->identifier($author);
         }

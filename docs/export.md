@@ -21,7 +21,7 @@ edition.
 ## Citation keys
 
 The first author's family name, the year and the title's first significant word, without accents:
-`chocron2024acid`, `neagoy2012planting`, `cotler2026logarithmic`. Within one export, a key taken
+`lecoutre2022bichromatic`, `exemple2012sowing`, `cotler2026logarithmic`. Within one export, a key taken
 twice gets `a`, `b`...
 
 ## BibTeX

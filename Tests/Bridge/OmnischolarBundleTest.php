@@ -61,7 +61,7 @@ final class OmnischolarBundleTest extends TestCase
         self::assertSame('hal', $site->hal->getName(), 'one source by its argument name');
         self::assertSame('openalex', $site->openalex->getName());
 
-        $works = $site->collector->collect(['hal' => 'someone', 'openalex' => Identifier::openalex('A5108007452')]);
+        $works = $site->collector->collect(['hal' => 'someone', 'openalex' => Identifier::openalex('A5046427077')]);
         self::assertSame(['Un', 'Deux'], array_map(static fn (Work $w) => $w->title, $works));
         self::assertSame(['hal', 'openalex'], array_values(array_filter($works, static fn (Work $w) => 'Deux' === $w->title))[0]->sources, 'the configured preferences: hal first');
         self::assertStringContainsString('abstract = {', $site->export->bibtex(new Work('T', abstract: 'A', year: 2024)), 'abstracts exported, as configured');

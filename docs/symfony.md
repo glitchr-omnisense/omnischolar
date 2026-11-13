@@ -80,7 +80,7 @@ final class PublicationsController extends AbstractController
     #[Route('/publications.bib')]
     public function bibtex(Collector $collector, Export $export): Response
     {
-        $works = $collector->collect(['openalex' => 'A5108007452', 'hal' => 'Keitaro Nakatani']);
+        $works = $collector->collect(['openalex' => 'A5046427077', 'hal' => 'Alain Aspect']);
 
         return new Response($export->bibtex($works), 200, ['Content-Type' => Export::contentType('bibtex')]);
     }

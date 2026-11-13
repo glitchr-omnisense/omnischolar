@@ -14,7 +14,7 @@ enum Scheme: string
     case ARXIV = 'arxiv';
     /** A HAL deposit: hal-01234567, tel-..., halshs-... */
     case HAL = 'hal';
-    /** A HAL author: their idHAL (keitaro-nakatani). */
+    /** A HAL author: their idHAL (philippe-grangier). */
     case IDHAL = 'idhal';
     case ORCID = 'orcid';
     /** W... (work), A... (author), S... (source), I... (institution). */

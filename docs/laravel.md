@@ -64,7 +64,7 @@ use Omnischolar\Collector;
 use Omnischolar\Export;
 
 Route::get('/publications.bib', function (Collector $collector, Export $export) {
-    $works = $collector->collect(['openalex' => 'A5108007452', 'hal' => 'Keitaro Nakatani']);
+    $works = $collector->collect(['openalex' => 'A5046427077', 'hal' => 'Alain Aspect']);
 
     return response($export->bibtex($works), 200, ['Content-Type' => Export::contentType('bibtex')]);
 });

@@ -187,13 +187,13 @@ parameters:
 			path: Tests/BareTest.php
 
 		-
-			message: '#^Cannot access offset 1 on mixed\.$#'
+			message: '#^Cannot access offset 0 on mixed\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
 			path: Tests/BareTest.php
 
 		-
-			message: '#^Cannot access offset 3 on mixed\.$#'
+			message: '#^Cannot access offset 5 on mixed\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
 			path: Tests/BareTest.php

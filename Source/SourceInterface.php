@@ -16,8 +16,8 @@ use Omnischolar\Model\Work;
  * an operation it does not do, an identifier it cannot read.
  *
  * An author or a work is named by an Identifier, or by a string the source
- * reads: one of its own identifiers ("A5108007452", "OL7092953A"), or for
- * the sources that search by name, a name ("Monica Neagoy").
+ * reads: one of its own identifiers ("A5046427077", "OL9990001A"), or for
+ * the sources that search by name, a name ("Alain Aspect").
  *
  * Unknown is null (or an empty page); a service that is down or refuses
  * is an UnavailableException (RateLimitedException when asked to slow

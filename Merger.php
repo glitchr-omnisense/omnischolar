@@ -423,7 +423,7 @@ final class Merger
         return array_map(static fn (int $i) => $works[$i], $positions);
     }
 
-    /** "Planting the Seeds of Algebra, PreK-2", from a title that may carry its subtitle after a colon. */
+    /** "Sowing the Seeds of Geometry, PreK-2", from a title that may carry its subtitle after a colon. */
     public static function mainTitle(Work $work): string
     {
         $parts = preg_split('~\s*[:：]\s+~u', $work->title, 2);

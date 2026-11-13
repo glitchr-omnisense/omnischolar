@@ -57,7 +57,7 @@ final readonly class Work
         return new self(...array_merge(get_object_vars($this), $changes));
     }
 
-    /** "Planting the Seeds of Algebra, PreK-2: Explorations for the Early Grades" */
+    /** "Sowing the Seeds of Geometry, PreK-2: Explorations for the Early Grades" */
     public function fullTitle(): string
     {
         return null !== $this->subtitle && '' !== $this->subtitle && !str_contains($this->title, $this->subtitle) ? $this->title.': '.$this->subtitle : $this->title;

@@ -77,5 +77,5 @@ in `$editions`, newest first. `new Merger([], false)` leaves them apart.
 Merging a merged list again (a weekly sync) takes the groups apart and groups them the same way.
 The exports cite a group by its newest edition.
 
-Open Library's two volumes of the *Méthode de Singapour CE1* stay two books: their titles differ
+Open Library's two volumes of the *Méthode Exemple CE1* stay two books: their titles differ
 by their volume number.

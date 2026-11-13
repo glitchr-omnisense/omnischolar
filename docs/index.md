@@ -6,16 +6,16 @@ source by name for an author, their works, one work or a search, gets neutral mo
 several sources say into one list and exports it for a reference manager:
 
 ```php
-$author = $registry->get('openalex')->author('A5108007452');
+$author = $registry->get('openalex')->author('A5046427077');
 $author->metrics->hIndex;                                    // OpenAlex's count
 
 $works = (new Collector($registry))->collect([               // every page of each source, merged
-    'openalex' => 'A5108007452',
-    'hal' => 'Keitaro Nakatani',
-    'crossref' => '0009-0005-1387-7295',
+    'openalex' => 'A5046427077',
+    'hal' => 'Alain Aspect',
+    'crossref' => '0000-0003-0094-5584',
 ]);
 $works[0]->sources;                                          // ['openalex', 'hal']: one record per work
-(new Export())->bibtex($works);                              // @article{malletroit2024complete, ...}
+(new Export())->bibtex($works);                              // @article{lecoutre2022bichromatic, ...}
 ```
 
 Each service is a provider package (`omnischolar/openalex`, `omnischolar/hal`,

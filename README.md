@@ -10,15 +10,15 @@ Published as `omnisense/omnischolar` (formerly `glitchr/omnischolar`, which this
 
 ```php
 $works = $collector->collect([
-    'openalex' => 'A5108007452',             // Keitaro Nakatani on OpenAlex
-    'hal' => 'Keitaro Nakatani',             // his deposits in HAL, by the name he signs
-    'crossref' => '0009-0005-1387-7295',     // the works deposited with his ORCID
+    'openalex' => 'A5046427077',             // Alain Aspect on OpenAlex
+    'hal' => 'Alain Aspect',                 // his deposits in HAL, by the name he signs
+    'crossref' => '0000-0003-0094-5584',     // the works deposited with his ORCID
 ]);
 $works[0]->title;                            // one record per work, each field from the source trusted for it
 $works[0]->pdfUrl;                           // the full text deposited in HAL
-$export->bibtex($works);                     // @article{chocron2024acid, ...}
+$export->bibtex($works);                     // @article{lecoutre2022bichromatic, ...}
 
-$books = (new Merger())->merge($openlibrary->works('Monica Neagoy'));
+$books = (new Merger())->merge($openlibrary->works('Alain Aspect'));
 $books[0]->editions;                         // the editions of one book, newest first
 ```
 
@@ -84,10 +84,10 @@ $registry = new Registry([new OpenAlexSourceFactory($http), new HalSourceFactory
     'openalex' => ['factory' => 'openalex', 'options' => ['mailto' => 'you@example.org']],
     'hal' => ['factory' => 'hal'],
 ]);
-echo $registry->get('openalex')->work('10.1039/d4sc04973j')->title, "\n";   // one work, by its DOI
+echo $registry->get('openalex')->work('10.1140/epjd/s10053-022-00549-6')->title, "\n";   // one work, by its DOI
 
 $collector = new Collector($registry);
-$works = $collector->collect(['openalex' => 'A5108007452', 'hal' => 'Keitaro Nakatani']);
+$works = $collector->collect(['openalex' => 'A5046427077', 'hal' => 'Alain Aspect']);
 echo count($works), " works, merged\n";
 foreach ($collector->incomplete as $source => $why) {
     echo "skipped $source: $why\n";                 // down, rate limited, an answer cut short: ask again later
@@ -126,8 +126,8 @@ public function __construct(SourceInterface $openalex, Collector $collector, Exp
 ```sh
 cd docker && cp .env.dist .env
 docker compose run --rm omnischolar sources
-docker compose run --rm omnischolar works openalex A5108007452 --from 2024 --to 2024
-docker compose run --rm omnischolar merge openlibrary:"Monica Neagoy" crossref:"Monica Neagoy"
+docker compose run --rm omnischolar works openalex A5046427077 --from 2022 --to 2022
+docker compose run --rm omnischolar merge openlibrary:"Alain Aspect" crossref:"Alain Aspect"
 docker compose run --rm omnischolar bare      # plain PHP: no bundle, no container, and what PHP loaded
 docker compose run --rm omnischolar test
 ```

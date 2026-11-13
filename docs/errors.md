@@ -54,7 +54,7 @@ use Omnischolar\Exception\RateLimitedException;
 use Omnischolar\Exception\UnavailableException;
 
 try {
-    $page = $registry->get('openalex')->works('A5108007452');
+    $page = $registry->get('openalex')->works('A5046427077');
 } catch (RateLimitedException $e) {
     $retry = $e->retryAfter;                                   // later, or with an api_key
 } catch (UnavailableException) {

@@ -46,10 +46,10 @@ $registry = new Registry([new OpenAlexSourceFactory($http), new HalSourceFactory
     'hal' => ['factory' => 'hal'],
 ]);
 
-$author = $registry->get('openalex')->author('A5108007452');
+$author = $registry->get('openalex')->author('A5046427077');
 echo $author->name, ': ', $author->metrics->works, ' works, h-index ', $author->metrics->hIndex, "\n";
 
-$works = (new Collector($registry))->collect(['openalex' => 'A5108007452', 'hal' => 'Keitaro Nakatani'], new Query(from: 2024, to: 2024));
+$works = (new Collector($registry))->collect(['openalex' => 'A5046427077', 'hal' => 'Alain Aspect'], new Query(from: 2022, to: 2022));
 foreach ($works as $work) {
     echo $work->date, '  ', $work->title, ' - ', $work->venue?->name, ' [', implode(', ', $work->sources), "]\n";
 }
@@ -58,31 +58,36 @@ echo (new Export())->bibtex($works[0]);
 
 ```
 $ php bare.php
-Keitaro Nakatani: 387 works, h-index 53
-2024-10-04  Complete kinetic and photochemical characterization of the multi-step photochromic reaction of donor–acceptor Stenhouse adducts - Physical Chemistry Chemical Physics [openalex, hal]
-2024-09-25  Cascade Fluorescence Modulation in Photochromic Microcapsules - ACS Applied Materials & Interfaces [openalex, hal]
-2024-09-03  Tuning the Thermal Stability of Tetra ‐ o– chloroazobenzene Derivatives by Transforming Push‐Pull to Push‐Push Systems - Chemistry - A European Journal [openalex, hal]
-2024-01-01  Acid-sensitive photoswitches: towards catalytic on-demand release of stored light energy - Chemical Science [openalex, hal]
-@article{malletroit2024complete,
-  author = {Mallétroit, Julien and Djian, Aurélie and Nakatani, Keitaro and Xie, Juan and Métivier, Rémi and Laurent, Guillaume},
-  title = {{Complete kinetic and photochemical characterization of the multi-step photochromic reaction of donor–acceptor Stenhouse adducts}},
-  journal = {Physical Chemistry Chemical Physics},
-  year = {2024},
-  month = {oct},
-  volume = {27},
-  number = {3},
-  pages = {1320--1326},
-  doi = {10.1039/d4cp02267j},
-  issn = {1463-9076},
-  hal_id = {hal-04737711},
-  url = {https://doi.org/10.1039/d4cp02267j},
+Alain Aspect: 686 works, h-index 64
+2022-11-01  Bichromatic state-dependent disordered potential for Anderson localization of ultracold atoms - The European Physical Journal D [openalex, hal]
+2022-08-25  Full counting statistics of interacting lattice gases after an expansion: quantifying many-body coherence from atom correlations - HAL [openalex]
+2022-08-25  Towards the 3D Anderson Transition with Ultracold Atoms in Bichromatic Speckles - HAL [openalex, hal]
+2022-07-28  Full counting statistics of interacting lattice gases after an expansion: The role of the condensate depletion in the many-body coherence - arXiv (Cornell University) [openalex]
+2022-05-02  Ultracold atoms in strong disorder : towards the Anderson transition - Quantum Information Spring School [hal]
+2022-04-19  Towards the study of 3D Anderson transition by using a two-wavelength speckle disorder - HAL [openalex, hal]
+2022-04-19  Ultracold atoms in strong disorder : towards the Anderson transition - Palaiseau Florence workshop on ultracold atoms [hal]
+2022-02-17  Ultracold atoms in strong disorder : towards the Anderson transition - Simons Collaboration on Localization of Waves Annual Meeting 2022 [hal]
+2022-02-14  Spectral functions and localization-landscape theory in speckle potentials - Physical Review A [openalex, hal]
+@article{lecoutre2022bichromatic,
+  author = {Lecoutre, Baptiste and Guo, Yukun and Yu, Xudong and Niranjan, M. and Mukhtar, Musawwadah and Volchkov, Valentin and Aspect, Alain and Josse, Vincent},
+  title = {{Bichromatic state-dependent disordered potential for Anderson localization of ultracold atoms}},
+  journal = {The European Physical Journal D},
+  year = {2022},
+  month = {nov},
+  volume = {76},
+  number = {11},
+  pages = {218},
+  doi = {10.1140/epjd/s10053-022-00549-6},
+  issn = {1434-6060},
+  hal_id = {hal-03843937},
+  url = {https://doi.org/10.1140/epjd/s10053-022-00549-6},
   language = {en},
-  keywords = {DASA, photochromism, photoisomerization, reaction kinetics, quantum yield, double irradiation, temperature dependence}
+  keywords = {Anderson localization, ultracold atoms, disorder potential, Bose-Einstein condensate, spontaneous scattering, quantum transport}
 }
 ```
 
-(called live on 2026-10-26 from the harness's image, without a `mailto`: each work once, from
-OpenAlex and HAL merged; on 2026-10-05 the same script counted 288 works and an h-index of 51)
+(called live on 2026-11-13 from the harness's image, with a `mailto`: each work once, from
+OpenAlex and HAL merged - a poster HAL holds three times, at three venues, stays three records)
 
 No key, no account: the script asks the real services. That is all there is to it:
 
@@ -106,19 +111,19 @@ use Symfony\Component\HttpClient\HttpClient;
 
 $openalex = (new OpenAlexSourceFactory(HttpClient::create()))->create(['mailto' => 'support@glitchr.io']);
 
-$author = $openalex->author('A5108007452');
-$author->metrics->hIndex;                    // 53 on 2026-10-26
-$author->orcid();                            // 0009-0005-1387-7295
+$author = $openalex->author('A5046427077');
+$author->metrics->hIndex;                    // 64 on 2026-11-13
+$author->orcid();                            // 0000-0003-0094-5584
 
-$page = $openalex->works('A5108007452', new Query(from: 2024, to: 2024));
+$page = $openalex->works('A5046427077', new Query(from: 2022, to: 2022));
 foreach ($page as $work) {
     echo $work->year, ' ', $work->title, ' - ', $work->venue?->name, "\n";
 }
-$next = $openalex->works('A5108007452', new Query(cursor: $page->next));   // the next page
+$next = $openalex->works('A5046427077', new Query(cursor: $page->next));   // the next page
 ```
 
 An author or a work is named by an `Identifier` or a string: one of the source's own
-identifiers (`'A5108007452'`, `'OL7092953A'`, `'keitaro-nakatani'`, `'Juan.M.Maldacena.1'`), a
+identifiers (`'A5046427077'`, `'OL9990001A'`, `'philippe-grangier'`, `'Juan.M.Maldacena.1'`), a
 resolver URL (`https://orcid.org/...`, `https://doi.org/...`), or - for the sources that search
 by name (HAL, Crossref, Open Library, arXiv, INSPIRE) - a name.
 
@@ -137,7 +142,7 @@ $registry = new Registry(
     ],
 );
 $collector = new Collector($registry);
-$works = $collector->collect(['openalex' => 'A5108007452', 'hal' => 'Keitaro Nakatani']);
+$works = $collector->collect(['openalex' => 'A5046427077', 'hal' => 'Alain Aspect']);
 $collector->incomplete;   // the sources skipped (down, rate limited): do not cache this answer
 ```
 

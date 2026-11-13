@@ -7,11 +7,11 @@ namespace Omnischolar\Model;
  * DOI lower-cased and without its resolver, an ISBN as its ISBN-13, an
  * arXiv or HAL id without its version, an ORCID with its checksum checked.
  *
- *   Identifier::doi('https://doi.org/10.1039/D4SC04973J')->value;   // 10.1039/d4sc04973j
- *   Identifier::isbn('1-4129-9660-0')->value;                       // 9781412996600
- *   Identifier::parse('arXiv:hep-th/9711200v3');                    // arxiv:hep-th/9711200
- *   Identifier::parse('A5108007452');                               // openalex:A5108007452
- *   (string) Identifier::orcid('0009-0005-1387-7295');              // orcid:0009-0005-1387-7295
+ *   Identifier::doi('https://doi.org/10.1140/EPJD/S10053-022-00549-6')->value;   // 10.1140/epjd/s10053-022-00549-6
+ *   Identifier::isbn('2-99999-009-X')->value;                                    // 9782999990098
+ *   Identifier::parse('arXiv:hep-th/9711200v3');                                 // arxiv:hep-th/9711200
+ *   Identifier::parse('A5046427077');                                            // openalex:A5046427077
+ *   (string) Identifier::orcid('0000-0003-0094-5584');                           // orcid:0000-0003-0094-5584
  */
 final readonly class Identifier implements \Stringable
 {
@@ -163,7 +163,7 @@ final readonly class Identifier implements \Stringable
         return self::of(Scheme::OPENLIBRARY, $value);
     }
 
-    /** "doi:10.1039/d4sc04973j": what the Merger and the collections key on. */
+    /** "doi:10.1140/epjd/s10053-022-00549-6": what the Merger and the collections key on. */
     public function key(): string
     {
         return $this->scheme->value.':'.$this->value;

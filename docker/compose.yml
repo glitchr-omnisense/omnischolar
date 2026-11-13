@@ -2,13 +2,13 @@
 #
 #   cp .env.dist .env                                          # a contact address; an OpenAlex key if you have one
 #   docker compose run --rm omnischolar sources                # which sources are installed and configured
-#   docker compose run --rm omnischolar author openalex A5108007452
-#   docker compose run --rm omnischolar works openalex A5108007452 --from 2024 --to 2024
-#   docker compose run --rm omnischolar works openlibrary "Monica Neagoy"
-#   docker compose run --rm omnischolar work crossref 10.1039/d4sc04973j          # JSON
+#   docker compose run --rm omnischolar author openalex A5046427077
+#   docker compose run --rm omnischolar works openalex A5046427077 --from 2022 --to 2022
+#   docker compose run --rm omnischolar works openlibrary "Alain Aspect"
+#   docker compose run --rm omnischolar work crossref 10.1140/epjd/s10053-022-00549-6          # JSON
 #   docker compose run --rm omnischolar search hal "responsabilité civile" --domain shs.droit --from 2024
-#   docker compose run --rm omnischolar merge openlibrary:"Monica Neagoy" crossref:"Monica Neagoy"
-#   docker compose run --rm omnischolar merge openalex:A5108007452 hal:"Keitaro Nakatani" --from 2024 --format bibtex
+#   docker compose run --rm omnischolar merge openlibrary:"Alain Aspect" crossref:"Alain Aspect"
+#   docker compose run --rm omnischolar merge openalex:A5046427077 hal:"Alain Aspect" --from 2022 --format bibtex
 #   docker compose run --rm omnischolar bare                   # plain PHP: no bundle, no container, and what PHP loaded
 #   docker compose run --rm omnischolar test                   # every package's tests
 #   docker compose run --rm omnischolar phpstan                # PHPStan, each package at the highest level

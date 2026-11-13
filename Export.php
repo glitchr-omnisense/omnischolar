@@ -10,13 +10,13 @@ use Omnischolar\Model\WorkType;
 /**
  * Works as a reference manager imports them: BibTeX, RIS, CSL-JSON.
  *
- *   $export->bibtex($works);            // @article{nakatani2024acid, ...}
+ *   $export->bibtex($works);            // @article{lecoutre2022bichromatic, ...}
  *   $export->ris($work);                // TY  - JOUR ...
  *   $export->cslJson($works);           // [{"type": "article-journal", ...}]
  *   $export->format('bibtex', $works);  // by name: bibtex, ris, csl-json
  *
  * Citation keys are the first author's family name, the year and the
- * title's first word ("chocron2024acid"), made unique within one export.
+ * title's first word ("lecoutre2022bichromatic"), made unique within one export.
  * A book whose editions the Merger grouped is cited by its newest edition.
  */
 final class Export
@@ -262,7 +262,7 @@ final class Export
         return $keyed;
     }
 
-    /** "chocron2024acid": the first author's family name, the year, the title's first significant word. */
+    /** "lecoutre2022bichromatic": the first author's family name, the year, the title's first significant word. */
     public function citationKey(Work $work): string
     {
         $family = Merger::fingerprint($work->firstAuthor()?->familyName() ?? 'anonymous');

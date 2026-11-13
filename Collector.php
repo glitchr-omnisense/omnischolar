@@ -13,7 +13,7 @@ use Omnischolar\Source\SourceInterface;
  * A researcher's works from every source that knows them, page after page,
  * merged into one list:
  *
- *   $works = $collector->collect(['openalex' => 'A5108007452', 'hal' => 'Keitaro Nakatani', 'crossref' => '0009-0005-1387-7295']);
+ *   $works = $collector->collect(['openalex' => 'A5046427077', 'hal' => 'Alain Aspect', 'crossref' => '0000-0003-0094-5584']);
  *   $collector->incomplete;   // ['hal' => 'unreachable: ...'] the sources skipped: do not cache that answer
  *
  * A source that is down, rate limited, or cannot read the identifier given

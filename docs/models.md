@@ -21,7 +21,7 @@ A **source** is one service, configured. Every source implements the whole
 | `search(Query $query): Page` | works matching the query, one page at a time |
 
 An author or a work is named by an `Identifier`, or a string the source reads: one of its own
-identifiers (`'A5108007452'`, `'OL7092953A'`, `'keitaro-nakatani'`, `'Juan.M.Maldacena.1'`), a
+identifiers (`'A5046427077'`, `'OL9990001A'`, `'philippe-grangier'`, `'Juan.M.Maldacena.1'`), a
 resolver URL (`https://orcid.org/...`, `https://doi.org/...`), or - for the sources that search by
 name (HAL, Crossref, Open Library, arXiv, INSPIRE) - a name. Unknown is `null` or an empty page; a
 service down or asking to slow down is an `UnavailableException`; an identifier the source cannot
@@ -159,9 +159,9 @@ A name on a work.
 | `affiliations` | list of strings | `[]` | the institutions as printed on the work |
 
 - `Contributor::fromName(string $name, ?Identifiers $identifiers = null, string $role = AUTHOR)`
-  - `Nakatani, Keitaro` or `Keitaro Nakatani`: the family name from the comma, else the last word.
+  - `Exemple, Jeanne` or `Jeanne Exemple`: the family name from the comma, else the last word.
 - `familyName(): string` - the family name, or the last word of the name.
-- `sortName(): string` - `Nakatani, Keitaro`, as a bibliography sorts it.
+- `sortName(): string` - `Exemple, Jeanne`, as a bibliography sorts it.
 - `orcid(): ?string`.
 
 ### Venue
@@ -231,12 +231,12 @@ An author's counts, as one source computes them: they differ from one source to 
 checks it on its shape (and checksum) without the network:
 
 ```php
-Identifier::parse('https://doi.org/10.1039/D4SC04973J');   // doi:10.1039/d4sc04973j
-Identifier::parse('1-4129-9660-0');                         // isbn:9781412996600
-Identifier::parse('arXiv:hep-th/9711200v3');                // arxiv:hep-th/9711200
-Identifier::parse('bai:Juan.M.Maldacena.1');                // inspire_bai:Juan.M.Maldacena.1
-Identifier::of('idhal', 'keitaro-nakatani');
-Identifier::tryOf(Scheme::ORCID, '0000-0002-1825-0098');    // null: bad checksum
+Identifier::parse('https://doi.org/10.1140/EPJD/S10053-022-00549-6');   // doi:10.1140/epjd/s10053-022-00549-6
+Identifier::parse('2-99999-009-X');                                     // isbn:9782999990098
+Identifier::parse('arXiv:hep-th/9711200v3');                            // arxiv:hep-th/9711200
+Identifier::parse('bai:Juan.M.Maldacena.1');                            // inspire_bai:Juan.M.Maldacena.1
+Identifier::of('idhal', 'philippe-grangier');
+Identifier::tryOf(Scheme::ORCID, '0000-0002-1825-0098');                // null: bad checksum
 ```
 
 | Scheme (`Scheme::`) | Value | `label()` | Normalised as | `url()` |
@@ -245,8 +245,8 @@ Identifier::tryOf(Scheme::ORCID, '0000-0002-1825-0098');    // null: bad checksu
 | `ISBN` | `isbn` | ISBN | ISBN-13, checksum checked; an ISBN-10 converted (`isbn10()` gives it back for a 978 ISBN) | - |
 | `ISSN` | `issn` | ISSN | `NNNN-NNNC`, checksum checked | - |
 | `ARXIV` | `arxiv` | arXiv | without its version: `2401.12345`, `hep-th/9711200` | `https://arxiv.org/abs/<id>` |
-| `HAL` | `hal` | HAL | a deposit without its version: `hal-04772417` | `https://hal.science/<id>` |
-| `IDHAL` | `idhal` | idHAL | a HAL author, lower case: `keitaro-nakatani` | `https://cv.hal.science/<idhal>` |
+| `HAL` | `hal` | HAL | a deposit without its version: `hal-03843937` | `https://hal.science/<id>` |
+| `IDHAL` | `idhal` | idHAL | a HAL author, lower case: `philippe-grangier` | `https://cv.hal.science/<idhal>` |
 | `ORCID` | `orcid` | ORCID | `0000-0000-0000-000X`, checksum checked | `https://orcid.org/<orcid>` |
 | `OPENALEX` | `openalex` | OpenAlex | `W...` (work), `A...` (author), `S...` (source), `I...` (institution)... upper case | `https://openalex.org/<id>` |
 | `INSPIRE` | `inspire` | INSPIRE | a record number | - |

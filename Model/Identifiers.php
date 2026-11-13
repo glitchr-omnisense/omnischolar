@@ -83,7 +83,7 @@ final readonly class Identifiers implements \IteratorAggregate, \Countable
         return new self([...$this->identifiers, ...$other->identifiers]);
     }
 
-    /** @return list<string> "doi:10.1039/d4sc04973j"... */
+    /** @return list<string> "doi:10.1140/epjd/s10053-022-00549-6"... */
     public function keys(): array
     {
         return array_map(static fn (Identifier $i) => $i->key(), $this->identifiers);

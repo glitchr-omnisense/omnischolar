@@ -4,12 +4,12 @@
 /**
  * Omnischolar in bare PHP: no bundle, no container, no console component.
  * The registry is built by hand from the source packages installed, each
- * source says what it can do, then OpenAlex is asked for the works Keitaro
- * Nakatani (A5108007452) published in 2024 - the real service, no key
+ * source says what it can do, then OpenAlex is asked for the works Alain
+ * Aspect (A5046427077) published in 2022 - the real service, no key
  * needed - and the script lists what PHP loaded on the way.
  *
  *   docker compose run --rm omnischolar bare              # exits 1 when a class of a framework was loaded
- *   docker compose run --rm omnischolar bare --recorded   # the answer recorded on 2026-10-04 (cut down) instead of a call
+ *   docker compose run --rm omnischolar bare --recorded   # the answer recorded on 2026-11-13 (cut down) instead of a call
  *   docker compose run --rm omnischolar bare --json       # the same, whole: every class and file loaded
  *
  * OMNISCHOLAR_AUTOLOAD names another autoloader than the harness's.
@@ -26,8 +26,8 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 require getenv('OMNISCHOLAR_AUTOLOAD') ?: '/harness/vendor/autoload.php';
 
 $recorded = \in_array('--recorded', $argv, true);
-$http = !$recorded ? null : new MockHttpClient(static fn (string $method, string $url): MockResponse => str_contains(rawurldecode($url), 'author.id:A5108007452') && str_contains(rawurldecode($url), 'publication_year:2024-2024')
-    ? new MockResponse((string) file_get_contents(__DIR__.'/../recorded/openalex-works-2024.json'))
+$http = !$recorded ? null : new MockHttpClient(static fn (string $method, string $url): MockResponse => str_contains(rawurldecode($url), 'author.id:A5046427077') && str_contains(rawurldecode($url), 'publication_year:2022-2022')
+    ? new MockResponse((string) file_get_contents(__DIR__.'/../recorded/openalex-works-2022.json'))
     : new MockResponse('{"error": "Not recorded."}', ['http_code' => 404]));
 
 $factories = [];
@@ -45,7 +45,7 @@ foreach ($registry->all() as $name => $source) {
     $report['sources'][$name] = array_map(static fn (Capability $capability) => $capability->value, $source->capabilities());
 }
 if ($registry->has('openalex')) {
-    $page = $registry->get('openalex')->works('A5108007452', new Query(from: 2024, to: 2024));
+    $page = $registry->get('openalex')->works('A5046427077', new Query(from: 2022, to: 2022));
     $report['works'] = array_map(static fn (Work $work) => ['date' => $work->date, 'type' => $work->type->value, 'title' => $work->title, 'venue' => $work->venue?->name, 'doi' => $work->doi()], $page->works);
 }
 
@@ -69,7 +69,7 @@ if (!$report['sources']) {
     echo "  no omnischolar/* source package is installed\n";
 }
 if (null !== $report['works']) {
-    echo "\nOpenAlex, the works of A5108007452 (Keitaro Nakatani) in 2024", $recorded ? ', from the answer recorded on 2026-10-04' : ', asked of api.openalex.org', ":\n";
+    echo "\nOpenAlex, the works of A5046427077 (Alain Aspect) in 2022", $recorded ? ', from the answer recorded on 2026-11-13' : ', asked of api.openalex.org', ":\n";
     foreach ($report['works'] as $work) {
         printf("  %s  %-8s %s - %s\n", $work['date'], $work['type'], $work['title'], $work['venue']);
     }

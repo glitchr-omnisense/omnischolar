@@ -57,21 +57,21 @@ final class CiteTest extends TestCase
     public function testADoiBecomesARisRecord(): void
     {
         $answer = new JsonMockResponse(['message' => [
-            'DOI' => '10.1039/D4SC04973J', 'type' => 'journal-article',
-            'title' => ['Acid-sensitive photoswitches'], 'container-title' => ['Chemical Science'],
-            'author' => [['given' => 'Keitaro', 'family' => 'Nakatani']],
+            'DOI' => '10.5555/SPECKLE.2024.01', 'type' => 'journal-article',
+            'title' => ['Speckle traps'], 'container-title' => ['Journal of Example Physics'],
+            'author' => [['given' => 'Jeanne', 'family' => 'Exemple']],
             'issued' => ['date-parts' => [[2024, 9, 25]]], 'volume' => '15', 'page' => '16034-16039',
         ]]);
-        $ris = (new Cite($this->registry(new MockHttpClient($answer))))->ris('https://doi.org/10.1039/D4SC04973J');
+        $ris = (new Cite($this->registry(new MockHttpClient($answer))))->ris('https://doi.org/10.5555/SPECKLE.2024.01');
 
-        self::assertStringStartsWith("TY  - JOUR\r\nID  - nakatani2024acid\r\nAU  - Nakatani, Keitaro\r\nTI  - Acid-sensitive photoswitches\r\n", (string) $ris);
-        self::assertStringContainsString("DO  - 10.1039/d4sc04973j\r\n", (string) $ris);
-        self::assertSame('https://api.crossref.org/works/10.1039/d4sc04973j?mailto=test%40example.org', $answer->getRequestUrl());
+        self::assertStringStartsWith("TY  - JOUR\r\nID  - exemple2024speckle\r\nAU  - Exemple, Jeanne\r\nTI  - Speckle traps\r\n", (string) $ris);
+        self::assertStringContainsString("DO  - 10.5555/speckle.2024.01\r\n", (string) $ris);
+        self::assertSame('https://api.crossref.org/works/10.5555/speckle.2024.01?mailto=test%40example.org', $answer->getRequestUrl());
     }
 
     public function testNothingWhenCrossrefIsDown(): void
     {
-        self::assertNull((new Cite($this->registry(new MockHttpClient(new MockResponse('', ['http_code' => 503])))))->ris('10.1039/d4sc04973j'));
+        self::assertNull((new Cite($this->registry(new MockHttpClient(new MockResponse('', ['http_code' => 503])))))->ris('10.5555/speckle.2024.01'));
     }
 }
 ```
@@ -85,10 +85,11 @@ Cite
 OK (2 tests, 4 assertions)
 ```
 
-(run on 2026-10-26 in the harness's image, PHPUnit 11.5.57, no network)
+(run on 2026-11-13 in the harness's image, PHPUnit 11.5.58, no network)
 
 - Each provider's `Tests/Fixtures` holds answers recorded from the real service on 2026-10-04 to
-  start from (OpenAlex's Keitaro Nakatani, INSPIRE's Juan Maldacena, ORCID's Josiah Carberry...);
+  start from (OpenAlex's Alain Aspect, INSPIRE's Juan Maldacena, ORCID's Josiah Carberry...; Alain Aspect's
+  re-recorded on 2026-11-13, Open Library's books invented in the shape of its answers);
   the harness keeps one OpenAlex answer in `docker/harness/recorded/`.
 - Give arXiv, INSPIRE and Open Library `throttle: 0` in a test: their default throttle sleeps
   between two calls.
@@ -108,8 +109,8 @@ source throw an `UnavailableException`.
 Both are plain objects: build `Work`s by hand and check what comes out.
 
 ```php
-$a = new Work('Cascade Fluorescence Modulation', WorkType::ARTICLE, year: 2024, identifiers: Identifiers::of(Identifier::doi('10.1021/acsami.4c09186')), source: 'openalex', citations: 5);
-$b = new Work('Cascade fluorescence modulation', WorkType::ARTICLE, year: 2024, identifiers: Identifiers::of(Identifier::doi('10.1021/ACSAMI.4C09186'), Identifier::hal('hal-04722222')), source: 'hal');
+$a = new Work('Speckle Traps in Disordered Lattices', WorkType::ARTICLE, year: 2024, identifiers: Identifiers::of(Identifier::doi('10.5555/speckle.2024.02')), source: 'openalex', citations: 5);
+$b = new Work('Speckle traps in disordered lattices', WorkType::ARTICLE, year: 2024, identifiers: Identifiers::of(Identifier::doi('10.5555/SPECKLE.2024.02'), Identifier::hal('hal-01234568')), source: 'hal');
 
 $merged = (new Merger())->merge([$a], [$b]);
 // one Work: sources ['openalex', 'hal'], the DOI and the HAL id, citations 5 (OpenAlex's)

@@ -43,15 +43,15 @@ final class BareTest extends TestCase
 
         self::assertSame(0, $status);
         self::assertTrue($report['recorded']);
-        self::assertCount(4, $report['works']);
+        self::assertCount(6, $report['works']);
         self::assertSame([
-            'date' => '2024-09-25',
+            'date' => '2022-11-01',
             'type' => 'article',
-            'title' => 'Cascade Fluorescence Modulation in Photochromic Microcapsules',
-            'venue' => 'ACS Applied Materials & Interfaces',
-            'doi' => '10.1021/acsami.4c09023',
-        ], $report['works'][1]);
-        self::assertSame('10.1039/d4sc04973j', $report['works'][3]['doi']);
+            'title' => 'Bichromatic state-dependent disordered potential for Anderson localization of ultracold atoms',
+            'venue' => 'The European Physical Journal D',
+            'doi' => '10.1140/epjd/s10053-022-00549-6',
+        ], $report['works'][0]);
+        self::assertSame('10.1103/physreva.105.023314', $report['works'][5]['doi']);
         self::assertContains('works', $report['sources']['openalex']);
         self::assertContains('Symfony\Component\HttpClient\MockHttpClient', $report['symbols'], 'the answer came through the HTTP client given');
         self::assertSame([], self::framework($report), 'no class nor file of a framework');

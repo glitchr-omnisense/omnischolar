@@ -15,22 +15,28 @@ green ([Testing](testing.md#the-familys-own-tests)).
   Merger's rules (identifiers in order, preferences, preprints, editions, ORCIDs lent to names),
   the three exports, the Symfony bundle in a booted kernel, plain PHP with no class of a framework
   loaded.
-- Each provider on `MockHttpClient` and answers recorded from its real service on 2026-10-04.
+- Each provider on `MockHttpClient` and answers recorded from its real service on 2026-10-04 (the
+  OpenAlex, HAL and Crossref examples re-recorded on 2026-11-13; Open Library's books invented in
+  the shape of its answers).
 
 ## What was called live
 
 On 2026-10-26, from the harness's image, without a `mailto` or a key:
 
-- the first script of [Installation](installation.md#plain-php): OpenAlex's author A5108007452
-  and his 2024 works, merged with HAL's, exported as BibTeX;
+- the first script of [Installation](installation.md#plain-php): an OpenAlex author and their works
+  of one year, merged with HAL's, exported as BibTeX;
 - one call or two of each provider, pasted in its manual: arXiv (hep-th/9711200, a search in
-  hep-th), Crossref (10.1039/d4sc04973j), HAL (a search in `shs.droit`, the author
-  `remi-metivier`), INSPIRE (Juan Maldacena's profile and most cited papers), OpenAlex (an
-  author, his 2024 works), Open Library (ISBN 9781412996600), ORCID (Josiah Carberry's record and
-  works).
+  hep-th), Crossref (a work by DOI), HAL (a search in `shs.droit`, an author by idHAL), INSPIRE
+  (Juan Maldacena's profile and most cited papers), OpenAlex (an author, their works of one year),
+  Open Library (a book by ISBN), ORCID (Josiah Carberry's record and works).
+
+On 2026-11-13, from the same image, with a `mailto` and without a key: the same first script for
+Alain Aspect (A5046427077) and his 2022 works, `bare`, and the answers the OpenAlex, HAL and
+Crossref tests now read (Alain Aspect's profile, works and deposits; Philippe Grangier by idHAL),
+with Open Library's ISBN 9780521004220.
 
 Every service is open: every provider has been called live. The counts change from one day to the
-next (OpenAlex counted 288 works for A5108007452 on 2026-10-05, 387 on 2026-10-26).
+next.
 
 ## What is not verified
 

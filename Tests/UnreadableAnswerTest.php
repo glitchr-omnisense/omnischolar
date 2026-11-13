@@ -30,7 +30,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 final class UnreadableAnswerTest extends TestCase
 {
     /** A page as OpenAlex writes one, cut inside a title. */
-    private const CUT = '{"meta":{"count":383,"db_response_time_ms":41,"page":2,"per_page":100},"results":[{"id":"https://openalex.org/W1","title":"Multichromophoric sugar for fluorescence photoswitching","publication_year":2014},{"id":"https://openalex.org/W2","title":"Synthesis of a photo';
+    private const CUT = '{"meta":{"count":383,"db_response_time_ms":41,"page":2,"per_page":100},"results":[{"id":"https://openalex.org/W1","title":"Ultracold atoms in disordered potentials","publication_year":2014},{"id":"https://openalex.org/W2","title":"Expansion of a matter wave pa';
 
     public function testABodyCutShortIsUnavailableAndSaysWhatCame(): void
     {

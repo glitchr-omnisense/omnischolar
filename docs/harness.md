@@ -33,13 +33,13 @@ The configured sources are `openalex`, `hal`, `droit` (HAL filtered on `shs.droi
 `orcid`, `openlibrary`, `arxiv`, `inspire`.
 
 ```sh
-docker compose run --rm omnischolar works openalex A5108007452 --from 2024 --to 2024
-docker compose run --rm omnischolar works openlibrary "Monica Neagoy"
-docker compose run --rm omnischolar merge openlibrary:"Monica Neagoy" crossref:"Monica Neagoy"
-docker compose run --rm omnischolar merge openalex:A5108007452 hal:"Keitaro Nakatani" --from 2024 --format bibtex
+docker compose run --rm omnischolar works openalex A5046427077 --from 2022 --to 2022
+docker compose run --rm omnischolar works openlibrary "Alain Aspect"
+docker compose run --rm omnischolar merge openlibrary:"Alain Aspect" crossref:"Alain Aspect"
+docker compose run --rm omnischolar merge openalex:A5046427077 hal:"Alain Aspect" --from 2022 --format bibtex
 docker compose run --rm omnischolar search droit "responsabilité civile" --from 2024
 docker compose run --rm omnischolar author inspire bai:Juan.M.Maldacena.1
-docker compose run --rm omnischolar work crossref 10.1039/d4sc04973j
+docker compose run --rm omnischolar work crossref 10.1140/epjd/s10053-022-00549-6
 ```
 
 ## Bare: no bundle, no container
@@ -47,7 +47,7 @@ docker compose run --rm omnischolar work crossref 10.1039/d4sc04973j
 The console above is a `symfony/console` application over a registry built by hand; `bare` is
 less still - one PHP script, `docker/harness/bin/bare`, that requires the autoloader and nothing
 else. It builds the `Registry` from the source packages installed, asks each what it can do, asks
-OpenAlex for the works of A5108007452 in 2024 - the real service, or with `--recorded` the answer
+OpenAlex for the works of A5046427077 in 2022 - the real service, or with `--recorded` the answer
 kept in `docker/harness/recorded/` - then lists what PHP loaded and exits 1 if a class of a
 framework is among it (`Symfony\Component\DependencyInjection`, `Config`, `HttpKernel`,
 `HttpFoundation`, a bundle, Doctrine, Twig):
@@ -65,11 +65,13 @@ Omnischolar in bare PHP: the registry built by hand, no bundle, no container.
   arxiv        works work search abstracts open_access domains
   inspire      author works work search metrics citations abstracts affiliations domains
 
-OpenAlex, the works of A5108007452 (Keitaro Nakatani) in 2024, asked of api.openalex.org:
-  2024-10-04  article  Complete kinetic and photochemical characterization of the multi-step photochromic reaction of donor–acceptor Stenhouse adducts - Physical Chemistry Chemical Physics
-  2024-09-25  article  Cascade Fluorescence Modulation in Photochromic Microcapsules - ACS Applied Materials & Interfaces
-  2024-09-03  article  Tuning the Thermal Stability of Tetra ‐ o– chloroazobenzene Derivatives by Transforming Push‐Pull to Push‐Push Systems - Chemistry - A European Journal
-  2024-01-01  article  Acid-sensitive photoswitches: towards catalytic on-demand release of stored light energy - Chemical Science
+OpenAlex, the works of A5046427077 (Alain Aspect) in 2022, asked of api.openalex.org:
+  2022-11-01  article  Bichromatic state-dependent disordered potential for Anderson localization of ultracold atoms - The European Physical Journal D
+  2022-08-25  preprint Full counting statistics of interacting lattice gases after an expansion: quantifying many-body coherence from atom correlations - HAL
+  2022-08-25  conference Towards the 3D Anderson Transition with Ultracold Atoms in Bichromatic Speckles - HAL
+  2022-07-28  preprint Full counting statistics of interacting lattice gases after an expansion: The role of the condensate depletion in the many-body coherence - arXiv (Cornell University)
+  2022-04-19  conference Towards the study of 3D Anderson transition by using a two-wavelength speckle disorder - HAL
+  2022-02-14  article  Spectral functions and localization-landscape theory in speckle potentials - Physical Review A
 
 Loaded from Symfony: Symfony\Component\HttpClient, Symfony\Contracts\HttpClient, Symfony\Contracts\Service
 Classes of a framework (DependencyInjection, Config, HttpKernel, HttpFoundation, a bundle, Doctrine, Twig): none

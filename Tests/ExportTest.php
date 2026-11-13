@@ -16,31 +16,31 @@ final class ExportTest extends TestCase
     private static function article(): Work
     {
         return new Work(
-            title: 'Acid-sensitive photoswitches: towards catalytic on-demand release of stored light energy',
+            title: 'Speckle traps: towards on-demand release of stored ultracold atoms',
             type: WorkType::ARTICLE,
-            authors: [new Contributor('Léa Chocron', 'Léa', 'Chocron'), new Contributor('Keitaro Nakatani', 'Keitaro', 'Nakatani', Identifiers::of(Identifier::orcid('0009-0005-1387-7295')))],
+            authors: [new Contributor('Paul Martin', 'Paul', 'Martin'), new Contributor('Jeanne Exemple', 'Jeanne', 'Exemple', Identifiers::of(Identifier::orcid('0009-0000-0000-0017')))],
             year: 2024,
             date: '2024-09-25',
-            venue: new Venue('Chemical Science', Venue::JOURNAL, ['2041-6520'], 'Royal Society of Chemistry (RSC)', 'Chem. Sci.'),
+            venue: new Venue('Journal of Example Physics', Venue::JOURNAL, ['1234-5679'], 'Exemple Press', 'J. Ex. Phys.'),
             volume: '15',
             issue: '39',
             pages: '16034-16039',
-            abstract: 'Molecular solar thermal energy storage & release.',
-            identifiers: Identifiers::of(Identifier::doi('10.1039/d4sc04973j'), Identifier::hal('hal-04772417')),
-            url: 'https://pubs.rsc.org/sc/article/15/39/16034-16039/869801',
+            abstract: 'Ultracold atoms stored & release.',
+            identifiers: Identifiers::of(Identifier::doi('10.5555/speckle.2024.01'), Identifier::hal('hal-01234567')),
+            url: 'https://journal.example.org/article/15/39/16034-16039',
         );
     }
 
     private static function book(): Work
     {
         return new Work(
-            title: 'Planting the Seeds of Algebra, PreK-2',
+            title: 'Sowing the Seeds of Geometry, PreK-2',
             subtitle: 'Explorations for the Early Grades',
             type: WorkType::BOOK,
-            authors: [Contributor::fromName('Monica Neagoy')],
+            authors: [Contributor::fromName('Jeanne Exemple')],
             year: 2012,
-            publisher: 'Corwin',
-            identifiers: Identifiers::of(Identifier::isbn('1412996600'), Identifier::doi('10.4135/9781544308616')),
+            publisher: 'Exemple',
+            identifiers: Identifiers::of(Identifier::isbn('299999009X'), Identifier::doi('10.5555/9782999990104')),
         );
     }
 
@@ -63,28 +63,28 @@ final class ExportTest extends TestCase
         $bibtex = (new Export())->bibtex([self::article(), self::book(), self::preprint()]);
 
         self::assertSame(<<<'BIB'
-            @article{chocron2024acid,
-              author = {Chocron, Léa and Nakatani, Keitaro},
-              title = {{Acid-sensitive photoswitches: towards catalytic on-demand release of stored light energy}},
-              journal = {Chemical Science},
+            @article{martin2024speckle,
+              author = {Martin, Paul and Exemple, Jeanne},
+              title = {{Speckle traps: towards on-demand release of stored ultracold atoms}},
+              journal = {Journal of Example Physics},
               year = {2024},
               month = {sep},
               volume = {15},
               number = {39},
               pages = {16034--16039},
-              doi = {10.1039/d4sc04973j},
-              issn = {2041-6520},
-              hal_id = {hal-04772417},
-              url = {https://pubs.rsc.org/sc/article/15/39/16034-16039/869801}
+              doi = {10.5555/speckle.2024.01},
+              issn = {1234-5679},
+              hal_id = {hal-01234567},
+              url = {https://journal.example.org/article/15/39/16034-16039}
             }
 
-            @book{neagoy2012planting,
-              author = {Neagoy, Monica},
-              title = {{Planting the Seeds of Algebra, PreK-2: Explorations for the Early Grades}},
+            @book{exemple2012sowing,
+              author = {Exemple, Jeanne},
+              title = {{Sowing the Seeds of Geometry, PreK-2: Explorations for the Early Grades}},
               year = {2012},
-              publisher = {Corwin},
-              doi = {10.4135/9781544308616},
-              isbn = {9781412996600}
+              publisher = {Exemple},
+              doi = {10.5555/9782999990104},
+              isbn = {9782999990098}
             }
 
             @misc{cotler2026logarithmic,
@@ -104,20 +104,20 @@ final class ExportTest extends TestCase
     {
         $export = new Export(abstracts: true);
         $bibtex = $export->bibtex([self::article(), self::article()]);
-        self::assertStringContainsString('@article{chocron2024acid,', $bibtex);
-        self::assertStringContainsString('@article{chocron2024acida,', $bibtex);
-        self::assertStringContainsString('abstract = {Molecular solar thermal energy storage \& release.}', $bibtex);
+        self::assertStringContainsString('@article{martin2024speckle,', $bibtex);
+        self::assertStringContainsString('@article{martin2024specklea,', $bibtex);
+        self::assertStringContainsString('abstract = {Ultracold atoms stored \& release.}', $bibtex);
         self::assertSame('anonymous2024untitled', $export->citationKey(new Work('', year: 2024)));
     }
 
     public function testAGroupedBookIsCitedByItsNewestEdition(): void
     {
         $older = self::book();
-        $newer = new Work('Planting the Seeds of Algebra, PreK-2', WorkType::BOOK, [Contributor::fromName('Monica M. Neagoy')], 2016, publisher: 'Corwin Press', identifiers: Identifiers::of(Identifier::isbn('9781452279701')));
+        $newer = new Work('Sowing the Seeds of Geometry, PreK-2', WorkType::BOOK, [Contributor::fromName('Jeanne M. Exemple')], 2016, publisher: 'Éditions Exemple', identifiers: Identifiers::of(Identifier::isbn('9782999990067')));
         $group = $newer->with(['editions' => [$newer, $older], 'identifiers' => $newer->identifiers->merge($older->identifiers)]);
 
         $bibtex = (new Export())->bibtex($group);
-        self::assertStringContainsString('isbn = {9781452279701}', $bibtex);
+        self::assertStringContainsString('isbn = {9782999990067}', $bibtex);
         self::assertStringNotContainsString('doi =', $bibtex, 'not the 2012 edition\'s DOI');
     }
 
@@ -127,33 +127,33 @@ final class ExportTest extends TestCase
 
         self::assertSame(implode("\r\n", [
             'TY  - JOUR',
-            'ID  - chocron2024acid',
-            'AU  - Chocron, Léa',
-            'AU  - Nakatani, Keitaro',
-            'TI  - Acid-sensitive photoswitches: towards catalytic on-demand release of stored light energy',
-            'T2  - Chemical Science',
-            'J2  - Chem. Sci.',
+            'ID  - martin2024speckle',
+            'AU  - Martin, Paul',
+            'AU  - Exemple, Jeanne',
+            'TI  - Speckle traps: towards on-demand release of stored ultracold atoms',
+            'T2  - Journal of Example Physics',
+            'J2  - J. Ex. Phys.',
             'PY  - 2024',
             'DA  - 2024/09/25',
             'VL  - 15',
             'IS  - 39',
             'SP  - 16034',
             'EP  - 16039',
-            'PB  - Royal Society of Chemistry (RSC)',
-            'SN  - 2041-6520',
-            'DO  - 10.1039/d4sc04973j',
-            'UR  - https://pubs.rsc.org/sc/article/15/39/16034-16039/869801',
+            'PB  - Exemple Press',
+            'SN  - 1234-5679',
+            'DO  - 10.5555/speckle.2024.01',
+            'UR  - https://journal.example.org/article/15/39/16034-16039',
             'ER  -',
             '',
             'TY  - BOOK',
-            'ID  - neagoy2012planting',
-            'AU  - Neagoy, Monica',
-            'TI  - Planting the Seeds of Algebra, PreK-2: Explorations for the Early Grades',
+            'ID  - exemple2012sowing',
+            'AU  - Exemple, Jeanne',
+            'TI  - Sowing the Seeds of Geometry, PreK-2: Explorations for the Early Grades',
             'PY  - 2012',
-            'PB  - Corwin',
-            'SN  - 9781412996600',
-            'DO  - 10.4135/9781544308616',
-            'UR  - https://doi.org/10.4135/9781544308616',
+            'PB  - Exemple',
+            'SN  - 9782999990098',
+            'DO  - 10.5555/9782999990104',
+            'UR  - https://doi.org/10.5555/9782999990104',
             'ER  -',
         ])."\r\n", $ris);
     }
@@ -164,28 +164,28 @@ final class ExportTest extends TestCase
         $items = $export->csl([self::article(), self::book(), self::preprint()]);
 
         self::assertSame([
-            'id' => 'chocron2024acid',
+            'id' => 'martin2024speckle',
             'type' => 'article-journal',
-            'title' => 'Acid-sensitive photoswitches: towards catalytic on-demand release of stored light energy',
-            'author' => [['family' => 'Chocron', 'given' => 'Léa'], ['family' => 'Nakatani', 'given' => 'Keitaro']],
-            'container-title' => 'Chemical Science',
-            'container-title-short' => 'Chem. Sci.',
-            'publisher' => 'Royal Society of Chemistry (RSC)',
+            'title' => 'Speckle traps: towards on-demand release of stored ultracold atoms',
+            'author' => [['family' => 'Martin', 'given' => 'Paul'], ['family' => 'Exemple', 'given' => 'Jeanne']],
+            'container-title' => 'Journal of Example Physics',
+            'container-title-short' => 'J. Ex. Phys.',
+            'publisher' => 'Exemple Press',
             'issued' => ['date-parts' => [[2024, 9, 25]]],
             'volume' => '15',
             'issue' => '39',
             'page' => '16034-16039',
-            'DOI' => '10.1039/d4sc04973j',
-            'ISSN' => '2041-6520',
-            'URL' => 'https://pubs.rsc.org/sc/article/15/39/16034-16039/869801',
+            'DOI' => '10.5555/speckle.2024.01',
+            'ISSN' => '1234-5679',
+            'URL' => 'https://journal.example.org/article/15/39/16034-16039',
         ], $items[0]);
         self::assertSame('book', $items[1]['type']);
-        self::assertSame('9781412996600', $items[1]['ISBN']);
+        self::assertSame('9782999990098', $items[1]['ISBN']);
         self::assertSame(['date-parts' => [[2012]]], $items[1]['issued']);
         self::assertSame(['article', '2609.38052', 'Preprint'], [$items[2]['type'], $items[2]['number'], $items[2]['genre']]);
 
         $json = $export->format('csl-json', self::article());
-        self::assertSame('Léa', json_decode($json, true)[0]['author'][0]['given']);
+        self::assertSame('Paul', json_decode($json, true)[0]['author'][0]['given']);
         self::assertSame('application/x-bibtex; charset=utf-8', Export::contentType('bibtex'));
         $this->expectException(\InvalidArgumentException::class);
         $export->format('endnote', []);

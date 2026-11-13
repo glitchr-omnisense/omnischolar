@@ -22,7 +22,7 @@ final readonly class Contributor
     ) {
     }
 
-    /** "Nakatani, Keitaro" or "Keitaro Nakatani": the family name guessed from the comma, else the last word. */
+    /** "Exemple, Jeanne" or "Jeanne Exemple": the family name guessed from the comma, else the last word. */
     public static function fromName(string $name, ?Identifiers $identifiers = null, string $role = self::AUTHOR): self
     {
         $name = trim((string) preg_replace('~\s+~u', ' ', $name));
@@ -48,7 +48,7 @@ final readonly class Contributor
         return (string) end($parts);
     }
 
-    /** "Nakatani, Keitaro", as a bibliography sorts it. */
+    /** "Exemple, Jeanne", as a bibliography sorts it. */
     public function sortName(): string
     {
         return null !== $this->given && '' !== $this->given ? $this->familyName().', '.$this->given : $this->familyName();
